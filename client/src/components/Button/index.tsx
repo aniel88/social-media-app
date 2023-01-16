@@ -29,6 +29,8 @@ type ButtonProps = {
    * @type {string}
    */
   extraClasses?: string;
+
+  onClick: Function | undefined;
 };
 
 const sizes = ["small", "medium", "large"] as const;
@@ -95,7 +97,7 @@ const Button = React.forwardRef(
     const variantKey = isValidVariant ? variant : fallbackVariant;
     const sizeClass = sizingClasses[sizeKey];
     const variantClass = themeClasses[variantKey];
-    const classes = `${baseClass} ${sizeClass} ${variantClass} ${extraClasses}`;
+    const classes = `${templateClasses} ${baseClass} ${sizeClass} ${variantClass} ${extraClasses}`;
     console.warn(`dasdasdasd`);
     return (
       <button className={classes} disabled={isDisabled}>
