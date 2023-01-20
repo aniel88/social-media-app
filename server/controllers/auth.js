@@ -4,27 +4,37 @@ const password = require("../utils/password");
 const token = require("../utils/token");
 
 const register = (req, res) => {
-  const { username, email, password: userPassword, name } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    password: userPassword,
+    userName,
+  } = req.body;
 
   //#Check if user exists
-  const q = "SELECT * FROM users WHERE username= ?";
+  const q = "SELECT * FROM users WHERE userName= ?";
 
-  db.query(q, [username], (err, data) => {
+  db.query(q, [userName], (err, data) => {
     if (err) return res.status(500).json(err);
     if (data.length) return res.status(409).json("User already exists");
 
     //#Create a new user
     //##Hash password
     password
-      .hashPassword(userPassword)
+      .hash(userPassword)
       .then((hashedPassword) => {
         const q =
-          "INSERT INTO users (`username`, `email`, `password`, `name`) values (?, ?, ?, ?)";
+          "INSERT INTO users (`userName`, `email`, `password`, `firstName`, `lastName`) values (?, ?, ?, ?, ?)";
 
-        db.query(q, [username, email, hashedPassword, name], (err, data) => {
-          if (err) return res.status(500).json("Error");
-          return res.status(200).json("Account created");
-        });
+        db.query(
+          q,
+          [userName, email, hashedPassword, firstName, lastName],
+          (err, data) => {
+            if (err) return res.status(500).json("Error");
+            return res.status(200).json("Account created");
+          }
+        );
       })
       .catch((error) => console.log(error));
   });

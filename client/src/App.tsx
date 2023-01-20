@@ -10,15 +10,13 @@ import { ThemeProvider } from "@mui/material";
 function App() {
   return (
     <div>
-      <ThemeProvider theme={themeParam.theme.light}>
-        <HashRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </HashRouter>
-      </ThemeProvider>
+      <HashRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </HashRouter>
     </div>
   );
 }
