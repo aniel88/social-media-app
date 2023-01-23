@@ -1,15 +1,4 @@
 import React, { Reducer, useReducer } from "react";
-import {
-  Alert,
-  Button,
-  FormControl,
-  FormGroup,
-  Input,
-  InputLabel,
-} from "@mui/material";
-import StyledLogo from "../../components/Logo/index.styled";
-import StyledSection from "../../components/Box/Box.styled";
-import RegisterLayout from "../../styles/Layout";
 import { RegisterType } from "../../models/register";
 import {
   inputFormReducer,
@@ -33,8 +22,14 @@ import {
   RegisterImageTitle,
   RegisterImageText,
 } from "../../styles/RegisterImage.styled";
-import Title from "../../styles/Title.styled";
+import Button from "../../components/Button/Button";
+import FormGroup from "../../components/FormGroup/FormGroup";
+import FormControl from "../../components/FormControl/FormControl";
+import Input from "../../components/Input/Input";
+import { regex } from "../../utils/regex";
 
+import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faAt } from "@fortawesome/free-solid-svg-icons";
 const initialFormInput: RegisterType = {
   firstName: "",
   lastName: "",
@@ -68,47 +63,49 @@ const Register = (): JSX.Element => {
       });
   };
 
-  const renderAlert = (registrationStatus: RegisterResponse) => {
-    switch (registrationStatus.register.status) {
-      case "success":
-        return <Alert severity="success">Account created successfuly!</Alert>;
-      case "pending":
-        return <div>A</div>;
-      case "error":
-        return <Alert severity="error">This account already exists! </Alert>;
-      case "unknown":
-        return <></>;
-      case "warning":
-        return <Alert severity="warning">Something get wrong!</Alert>;
-    }
-  };
+  // const renderAlert = (registrationStatus: RegisterResponse) => {
+  //   switch (registrationStatus.register.status) {
+  //     case "success":
+  //       return <Alert severity="success">Account created successfuly!</Alert>;
+  //     case "pending":
+  //       return <div>A</div>;
+  //     case "error":
+  //       return <Alert severity="error">This account already exists! </Alert>;
+  //     case "unknown":
+  //       return <></>;
+  //     case "warning":
+  //       return <Alert severity="warning">Something get wrong!</Alert>;
+  //   }
+  // };
 
   return (
     <Layout>
       <Box flexDirection="row">
         <Form onSubmit={onSubmitHandler}>
-          <FormGroup sx={{ width: 300 }}>
-            {renderAlert(state)}
+          <FormGroup extraStyle={{ width: "300px" }}>
+            {/* {renderAlert(state)} */}
 
-            <FormControl sx={{ margin: "10px 0" }}>
-              <InputLabel htmlFor="firstName">First Name</InputLabel>
+            <FormControl>
               <Input
                 id="firstName"
+                placeholder="First name"
                 value={formValues.firstName}
-                aria-describedby="first-name"
                 onChange={(event) =>
                   setFormValues({
                     value: event.target.value,
                     type: event.target.id,
                   })
                 }
-                required
+                pattern={regex.firstname}
+                hasIcon={true}
+                fontAwesomeIcon={faUser}
+                iconColor="gray"
               />
             </FormControl>
-            <FormControl sx={{ margin: "10px 0" }}>
-              <InputLabel htmlFor="lastName">Last Name</InputLabel>
+            <FormControl>
               <Input
                 id="lastName"
+                placeholder="Last name"
                 value={formValues.lastName}
                 onChange={(event) =>
                   setFormValues({
@@ -116,14 +113,16 @@ const Register = (): JSX.Element => {
                     type: event.target.id,
                   })
                 }
-                aria-describedby="last-name"
-                required
+                pattern={regex.lastname}
+                hasIcon={true}
+                fontAwesomeIcon={faUser}
+                iconColor="gray"
               />
             </FormControl>
-            <FormControl sx={{ margin: "10px 0" }}>
-              <InputLabel htmlFor="userName">Username</InputLabel>
+            <FormControl>
               <Input
                 id="userName"
+                placeholder="Username"
                 value={formValues.userName}
                 onChange={(event) =>
                   setFormValues({
@@ -131,14 +130,16 @@ const Register = (): JSX.Element => {
                     type: event.target.id,
                   })
                 }
-                aria-describedby="userName"
-                required
+                pattern={regex.username}
+                hasIcon={true}
+                fontAwesomeIcon={faUser}
+                iconColor="gray"
               />
             </FormControl>
-            <FormControl sx={{ margin: "10px 0" }}>
-              <InputLabel htmlFor="email">Email address</InputLabel>
+            <FormControl>
               <Input
                 id="email"
+                placeholder="Email"
                 value={formValues.email}
                 onChange={(event) =>
                   setFormValues({
@@ -146,14 +147,16 @@ const Register = (): JSX.Element => {
                     type: event.target.id,
                   })
                 }
-                aria-describedby="email-address"
-                required
+                pattern={regex.email}
+                hasIcon={true}
+                fontAwesomeIcon={faAt}
+                iconColor="gray"
               />
             </FormControl>
-            <FormControl sx={{ margin: "10px 0" }}>
-              <InputLabel htmlFor="password">Password</InputLabel>
+            <FormControl>
               <Input
                 type="password"
+                placeholder="Password"
                 value={formValues.password}
                 onChange={(event) =>
                   setFormValues({
@@ -161,12 +164,19 @@ const Register = (): JSX.Element => {
                     type: event.target.id,
                   })
                 }
+                pattern={regex.password}
                 id="password"
-                aria-describedby="password"
-                required
+                hasIcon={true}
+                fontAwesomeIcon={faLock}
+                iconColor="gray"
               />
             </FormControl>
-            <Button type="submit" variant="contained" color="success">
+            <Button
+              size="small"
+              variant="primary"
+              type="submit"
+              extraStyle={{ marginTop: "10px" }}
+            >
               Create account
             </Button>
           </FormGroup>
@@ -181,7 +191,7 @@ const Register = (): JSX.Element => {
             </RegisterImageText>
             <RegisterImageText>Do you have an account?</RegisterImageText>
             <a href="/login">
-              <Button variant="contained" color="success">
+              <Button size="small" variant="primary" type="button">
                 Login
               </Button>
             </a>
