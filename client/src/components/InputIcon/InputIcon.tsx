@@ -16,7 +16,7 @@ const colors = ["gray", "green", "red", "yellow"] as const;
 type IconColors = typeof colors[number];
 
 const baseClass = "input-icon";
-const templateClasse = "absolute mx-4 bg-white";
+const templateClasse = "absolute mx-4 bg-whites";
 
 const sizeClasses = {
   small: "text-sm",

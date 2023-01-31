@@ -1,6 +1,11 @@
 {
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "debounce": "^1.2.1",
     "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7"
   }
 }
