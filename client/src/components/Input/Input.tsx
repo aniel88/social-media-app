@@ -20,7 +20,7 @@ const templateClass =
 const borderColorClasses = {
   gray: "border-gray-300 ",
   green: "border-green-500",
-  red: "border-pink-500",
+  red: "border-pink-500 focus:border-pink-500",
 };
 
 const Input = ({

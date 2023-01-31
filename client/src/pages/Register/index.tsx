@@ -8,7 +8,7 @@ import { RegisterInputFormType, RegisterType } from "../../models/register";
 import {
   inputFormReducer,
   Action,
-} from "../../redux/reducers/register/registerForm";
+} from "../../redux/reducers/register/form";
 import { error, success } from "../../redux/reducers/register/registerSlice";
 import { useDispatch, useSelector } from "react-redux/es/exports";
 import { RegisterResponse } from "../../redux/store/store";

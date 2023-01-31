@@ -1,3 +1,4 @@
+import { LoginInputFormType } from "../../../models/login";
 import { RegisterInputFormType } from "../../../models/register";
 
 interface Action {
@@ -5,9 +6,12 @@ interface Action {
   value: string;
 }
 
-const inputFormReducer = (state: RegisterInputFormType, action: Action) => {
+const inputFormReducer = (
+  state: RegisterInputFormType | LoginInputFormType,
+  action: Action
+) => {
   const { value, type } = action;
-  const { regex, errorMessage } = state[type as keyof RegisterInputFormType];
+  const { regex, errorMessage } = state[type as keyof typeof state];
   const valueIsMatching = regex.test(value);
 
   return {
