@@ -17,6 +17,8 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
     "mysql": "^2.18.1",
+    "mysql2": "^3.1.0",
+    "nodemailer": "^6.9.1",
     "nodemon": "^2.0.20",
     "sql": "^0.78.0"
   }

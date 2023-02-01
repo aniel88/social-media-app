@@ -1,15 +1,11 @@
 /* React */
-import React, { Reducer, useReducer } from "react";
+import React, { Reducer, useReducer, useState } from "react";
 
 /* Models */
 import { RegisterInputFormType, RegisterType } from "../../models/register";
 
 /* Reducers */
-import {
-  inputFormReducer,
-  Action,
-} from "../../redux/reducers/register/form";
-import { error, success } from "../../redux/reducers/register/registerSlice";
+import { inputFormReducer, Action } from "../../redux/reducers/register/form";
 import { useDispatch, useSelector } from "react-redux/es/exports";
 import { RegisterResponse } from "../../redux/store/store";
 
@@ -33,6 +29,9 @@ import InputError from "../../components/InputError/InputError";
 import Layout from "../../components/Layout/Layout";
 import Box from "../../components/Box/Box";
 import Form from "../../components/Form/Form";
+import Text from "../../components/Text/Text";
+import Container from "../../components/Container/Container";
+import Heading from "../../components/Heading/Heading";
 
 /* Regex */
 import { regex } from "../../utils/regex";
@@ -47,9 +46,7 @@ import checkFormSubmission from "../../utils/checkFormSubmission";
 
 /* Assets */
 import registerImageUrl from "../../assets/register_image.jpeg";
-import Heading from "../../components/Heading/Heading";
-import Text from "../../components/Text/Text";
-import Container from "../../components/Container/Container";
+import Href from "../../components/Href/Href";
 
 const initialFormInput: RegisterInputFormType = {
   firstName: {
@@ -90,28 +87,49 @@ const Register = (): JSX.Element => {
     inputFormReducer,
     initialFormInput
   );
+
   const dispatch = useDispatch();
   const state: RegisterResponse = useSelector(
     (state: RegisterResponse) => state
   );
 
+  const usernameExist = async (username: string) => {
+    const response = await axios.get(
+      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/checkUsername/${username}`
+    );
+    return response.data.exist;
+  };
+
+  const emailExist = async (email: string) => {
+    const response = await axios.get(
+      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/checkEmail/${email}`
+    );
+    return response.data.exist;
+  };
+
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formInputValues: RegisterType = {
-      firstName: formValues.firstName,
-      lastName: formValues.lastName,
-      userName: formValues.userName,
-      email: formValues.email,
-      password: formValues.password,
+      firstName: formValues.firstName.value,
+      lastName: formValues.lastName.value,
+      userName: formValues.userName.value,
+      email: formValues.email.value,
+      password: formValues.password.value,
     };
+
     axios
-      .post("http://localhost:8080/api/auth/register", formInputValues)
+      .post(
+        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/register`,
+        formInputValues
+      )
       .then((response) => {
-        dispatch(success());
+        // dispatch(success());
+        console.log(response);
         navigate("/login");
       })
       .catch((err) => {
-        dispatch(error());
+        console.log(err);
+        // dispatch(error());
       });
   };
 
@@ -172,18 +190,31 @@ const Register = (): JSX.Element => {
                 value={formValues.userName.value}
                 placeholder="Username"
                 isValid={formValues.userName.isValid}
-                onChange={debounceHandler(
-                  (event: any) =>
+                onChange={debounceHandler(async (event: any) => {
+                  if (
+                    event.target.value &&
+                    (await usernameExist(event.target.value))
+                  ) {
                     setFormValues({
                       value: event.target.value,
                       type: event.target.id,
-                    }),
-                  debounceWaitTime
-                )}
+                      valid: false,
+                      customErrorMessage: "This username already exists",
+                    });
+                  } else {
+                    setFormValues({
+                      value: event.target.value,
+                      type: event.target.id,
+                      customErrorMessage:
+                        initialFormInput.userName.errorMessage,
+                    });
+                  }
+                }, debounceWaitTime)}
                 hasIcon={true}
                 fontAwesomeIcon={faUser}
                 iconColor="gray"
               />
+
               <InputError
                 isActive={formValues.userName.isValid}
                 message={formValues.userName.errorMessage}
@@ -195,14 +226,25 @@ const Register = (): JSX.Element => {
                 placeholder="Email"
                 value={formValues.email.value}
                 isValid={formValues.email.isValid}
-                onChange={debounceHandler(
-                  (event: any) =>
+                onChange={debounceHandler(async (event: any) => {
+                  if (
+                    event.target.value &&
+                    (await emailExist(event.target.value))
+                  ) {
                     setFormValues({
                       value: event.target.value,
                       type: event.target.id,
-                    }),
-                  debounceWaitTime
-                )}
+                      valid: false,
+                      customErrorMessage: "This email already exists",
+                    });
+                  } else {
+                    setFormValues({
+                      value: event.target.value,
+                      type: event.target.id,
+                      customErrorMessage: initialFormInput.email.errorMessage,
+                    });
+                  }
+                }, debounceWaitTime)}
                 hasIcon={true}
                 fontAwesomeIcon={faAt}
                 iconColor="gray"
@@ -287,11 +329,11 @@ const Register = (): JSX.Element => {
               alignItem="center"
               width="full"
             >
-              <a href="/#/login">
+              <Href href="/#/login">
                 <Button size="small" variant="primary" type="button">
                   Login
                 </Button>
-              </a>
+              </Href>
             </Container>
           </RegisterImage>
           <img src={registerImageUrl} alt="image" />

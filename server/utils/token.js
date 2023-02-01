@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
 
-const privateKey = fs.readFileSync("./private.key");
+const privateKey = process.env.LOGIN_PRIVATE_KEY;
 
 const generate = async (data) => {
   const token = await new Promise((resolve, reject) => {
@@ -15,4 +14,14 @@ const generate = async (data) => {
   return token;
 };
 
-module.exports = { generate };
+const decode = (token) => {
+  const decodePromise = new Promise((resolve, reject) => {
+    jwt.verify(token, privateKey, (err, decoded) => {
+      resolve(decoded);
+      if (err) reject(err);
+    });
+  });
+  return decodePromise;
+};
+
+module.exports = { generate, decode };

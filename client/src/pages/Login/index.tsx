@@ -35,6 +35,7 @@ import { Action, inputFormReducer } from "../../redux/reducers/register/form";
 /* Utils */
 import { debounceHandler, debounceWaitTime } from "../../utils/debounce";
 import checkFormSubmission from "../../utils/checkFormSubmission";
+import Href from "../../components/Href/Href";
 
 const initialFormInput: LoginInputFormType = {
   email: {
@@ -100,11 +101,11 @@ const Login = (): JSX.Element => {
               alignItem="center"
               width="full"
             >
-              <a href="/#/register">
+              <Href href="/#/register">
                 <Button size="small" variant="primary" type="button">
                   Register
                 </Button>
-              </a>
+              </Href>
             </Container>
           </RegisterImage>
           <img src={registerImageUrl} alt="image" />

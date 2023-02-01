@@ -12,7 +12,7 @@ type FlexDirection = typeof directions[number];
 
 const flexDirectionsClasses = {
   row: "flex-row",
-  column: "flex-column",
+  column: "flex-col",
 };
 
 const baseClass = "box";
@@ -36,7 +36,11 @@ const Box = ({
 
   const className = `${baseClass} ${templateClasses} ${flexDirectionClass}`;
 
-  return <div className={className}>{children}</div>;
+  return (
+    <div className={className} style={extraStyle}>
+      {children}
+    </div>
+  );
 };
 
 export default Box;
