@@ -1,7 +1,7 @@
 const queries = {
   /* ADD */
   ADD_USER:
-    "INSERT INTO users (`userName`, `email`, `password`, `firstName`, `lastName`,`isValidate`, `validationToken`) values (?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO users (`userName`, `email`, `password`, `firstName`, `lastName`,`isValidate`, `validationToken`, `successToken`) values (?, ?, ?, ?, ?, ?, ?, ?)",
 
   /* SELECT */
   SELECT_USER_BY_USERNAME_OR_EMAIL:
@@ -16,6 +16,8 @@ const queries = {
   UPDATE_USER_VALIDATION_BY_ID:
     "UPDATE users SET isValidate = ? WHERE userName = ?",
   UPDATE_USER_VALIDATION_TOKEN:
-    "UPDATE users SET validationToken='' WHERE userName = ? AND validationToken = ?",
+    "UPDATE users SET validationToken ='' WHERE userName = ? AND validationToken = ?",
+  UPDATE_USER_SUCCESS_TOKEN:
+    "UPDATE users SET successToken ='' WHERE userName = ? AND successToken = ?",
 };
 module.exports = { queries };

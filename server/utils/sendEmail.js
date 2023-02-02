@@ -8,7 +8,7 @@ const sendEmail = (email, subject, url) => {
         to: email,
         subject: subject,
         text: subject,
-        html: `<b>Please confirm your email address by accesing this link: <a href="http://localhost:8080/api/auth/confirm/${url}">link</a></b>`,
+        html: `<b>Please confirm your email address by accesing this link: <a href="http://${process.env.DOMAIN}:${process.env.SERVER_PORT}/api/auth/register/confirm/${url}">link</a></b>`,
       })
       .then((resp) => resolve(resp))
       .catch((err) => reject(err));

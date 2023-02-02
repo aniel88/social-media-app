@@ -28,7 +28,8 @@ const register = (req, res) => {
       //##Hash password
       try {
         const hashedPassword = await password.hash(userPassword);
-        const generatedToken = await token.generate({ userName: userName });
+        const validationToken = await token.generate({ userName: userName });
+        const successToken = await token.generate({ userName: userName });
 
         /* Add in database */
         db.query(
@@ -40,7 +41,8 @@ const register = (req, res) => {
             firstName,
             lastName,
             0,
-            generatedToken,
+            validationToken,
+            successToken,
           ],
           (err, data) => {
             if (err) return res.status(500).json("Error");
@@ -48,9 +50,9 @@ const register = (req, res) => {
             /*           Send email if data has been added to db */
             if (data.length !== 0) {
               /* Send email */
-              sendEmail(email, "Confirm your account", generatedToken).then(
+              sendEmail(email, "Confirm your account", validationToken).then(
                 (info) => {
-                  return res.status(200).json("Account verified");
+                  return res.status(200).json({ successToken: successToken });
                 }
               );
             }
@@ -120,7 +122,7 @@ const confirmAddress = (req, res) => {
             console.log(err);
           }
           res.redirect(
-            `http://${process.env.DOMAIN}:${process.env.CLIENT_PORT}/#/confirmRegister/${tokenConfirm}`
+            `http://${process.env.DOMAIN}:${process.env.CLIENT_PORT}/#/register/confirm/${tokenConfirm}`
           );
         }
       );
@@ -152,32 +154,40 @@ const checkEmailValidation = (req, res) => {
   });
 };
 
-const validationToken = (req, res) => {
-  const userToken = req.params.token;
+const validationToken = (type) => {
+  return function (req, res) {
+    const userToken = req.params.token;
 
-  token
-    .decode(userToken)
-    .then((resp) => {
-      if (resp) {
-        const { userName } = resp;
+    token
+      .decode(userToken)
+      .then((resp) => {
+        if (resp) {
+          const { userName } = resp;
+          let q = "";
 
-        db.query(
-          queries.UPDATE_USER_VALIDATION_TOKEN,
-          [userName, userToken],
-          (err, data) => {
+          switch (type) {
+            case "confirm":
+              q = queries.UPDATE_USER_VALIDATION_TOKEN;
+              break;
+            case "success":
+              q = queries.UPDATE_USER_SUCCESS_TOKEN;
+              break;
+          }
+
+          db.query(q, [userName, userToken], (err, data) => {
             if (err) res.status(500).json(err);
             if (data.changedRows === 0) {
               res.status(500).json("ALready validate");
             } else {
               res.status(200).json("Validate");
             }
-          }
-        );
-      } else {
-        res.status(500).json("User not found");
-      }
-    })
-    .catch((error) => console.log(error));
+          });
+        } else {
+          res.status(500).json("User not found");
+        }
+      })
+      .catch((error) => console.log(error));
+  };
 };
 
 module.exports = {

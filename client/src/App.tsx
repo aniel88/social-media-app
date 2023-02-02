@@ -6,7 +6,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import { ThemeProvider } from "@mui/material";
-import ConfirmRegister from "./pages/ConfirmRegister/ConfirmRegister";
+import ConfirmRegister from "./pages/Register/ConfirmRegister";
+import SuccessRegister from "./pages/Register/SuccessRegister";
 
 function App() {
   return (
@@ -16,7 +17,16 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/confirmRegister/:token" element={<ConfirmRegister />} />
+
+          {/* Secured routes by token */}
+          <Route
+            path="/register/success/:token"
+            element={<SuccessRegister />}
+          />
+          <Route
+            path="/register/confirm/:token"
+            element={<ConfirmRegister />}
+          />
         </Routes>
       </HashRouter>
     </div>

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const privateKey = process.env.LOGIN_PRIVATE_KEY;
+const privateKey = process.env.TOKEN_PRIVATE_KEY;
 
 const generate = async (data) => {
   const token = await new Promise((resolve, reject) => {

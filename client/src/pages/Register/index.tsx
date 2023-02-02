@@ -95,14 +95,14 @@ const Register = (): JSX.Element => {
 
   const usernameExist = async (username: string) => {
     const response = await axios.get(
-      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/checkUsername/${username}`
+      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/check/username/${username}`
     );
     return response.data.exist;
   };
 
   const emailExist = async (email: string) => {
     const response = await axios.get(
-      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/checkEmail/${email}`
+      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/check/email/${email}`
     );
     return response.data.exist;
   };
@@ -123,9 +123,7 @@ const Register = (): JSX.Element => {
         formInputValues
       )
       .then((response) => {
-        // dispatch(success());
-        console.log(response);
-        navigate("/login");
+        navigate(`success/${response.data.successToken}`);
       })
       .catch((err) => {
         console.log(err);
