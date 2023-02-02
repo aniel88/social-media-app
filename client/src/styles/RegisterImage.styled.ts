@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const RegisterImageLayout = styled.div`
   position: relative;
-  z-index: 111;
+  z-index: 1;
   flex-shrink: 1;
 `;
 

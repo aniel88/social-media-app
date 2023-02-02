@@ -47,6 +47,7 @@ import checkFormSubmission from "../../utils/checkFormSubmission";
 /* Assets */
 import registerImageUrl from "../../assets/register_image.jpeg";
 import Href from "../../components/Href/Href";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 const initialFormInput: RegisterInputFormType = {
   firstName: {
@@ -82,6 +83,7 @@ const initialFormInput: RegisterInputFormType = {
 };
 
 const Register = (): JSX.Element => {
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [formValues, setFormValues] = useReducer<Reducer<any, Action>>(
     inputFormReducer,
@@ -109,6 +111,7 @@ const Register = (): JSX.Element => {
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
     const formInputValues: RegisterType = {
       firstName: formValues.firstName.value,
       lastName: formValues.lastName.value,
@@ -132,212 +135,216 @@ const Register = (): JSX.Element => {
   };
 
   return (
-    <Layout extraStyle={{ backgroundColor: "#c3beff" }}>
-      <Box flexDirection="row">
-        <Form onSubmit={onSubmitHandler}>
-          <FormGroup extraStyle={{ width: "300px" }}>
-            <FormControl>
-              <Input
-                id="firstName"
-                placeholder="First name"
-                value={formValues.firstName.value}
-                onChange={debounceHandler(
-                  (event: any) =>
-                    setFormValues({
-                      value: event.target.value,
-                      type: event.target.id,
-                    }),
-                  debounceWaitTime
-                )}
-                isValid={formValues.firstName.isValid}
-                hasIcon={true}
-                fontAwesomeIcon={faUser}
-                iconColor="gray"
-              />
-              <InputError
-                isActive={formValues.firstName.isValid}
-                message={formValues.firstName.errorMessage}
-              />
-            </FormControl>
-            <FormControl>
-              <Input
-                id="lastName"
-                placeholder="Last name"
-                value={formValues.lastName.value}
-                isValid={formValues.lastName.isValid}
-                onChange={debounceHandler(
-                  (event: any) =>
-                    setFormValues({
-                      value: event.target.value,
-                      type: event.target.id,
-                    }),
-                  debounceWaitTime
-                )}
-                hasIcon={true}
-                fontAwesomeIcon={faUser}
-                iconColor="gray"
-              />
-              <InputError
-                isActive={formValues.lastName.isValid}
-                message={formValues.lastName.errorMessage}
-              />
-            </FormControl>
-            <FormControl>
-              <Input
-                id="userName"
-                value={formValues.userName.value}
-                placeholder="Username"
-                isValid={formValues.userName.isValid}
-                onChange={debounceHandler(async (event: any) => {
-                  if (
-                    event.target.value &&
-                    (await usernameExist(event.target.value))
-                  ) {
-                    setFormValues({
-                      value: event.target.value,
-                      type: event.target.id,
-                      valid: false,
-                      customErrorMessage: "This username already exists",
-                    });
-                  } else {
-                    setFormValues({
-                      value: event.target.value,
-                      type: event.target.id,
-                      customErrorMessage:
-                        initialFormInput.userName.errorMessage,
-                    });
-                  }
-                }, debounceWaitTime)}
-                hasIcon={true}
-                fontAwesomeIcon={faUser}
-                iconColor="gray"
-              />
+    <>
+      <LoadingSpinner show={isLoading} />
+      <Layout extraStyle={{ backgroundColor: "#c3beff" }}>
+        <Box flexDirection="row">
+          <Form onSubmit={onSubmitHandler}>
+            <FormGroup extraStyle={{ width: "300px" }}>
+              <FormControl>
+                <Input
+                  id="firstName"
+                  placeholder="First name"
+                  value={formValues.firstName.value}
+                  onChange={debounceHandler(
+                    (event: any) =>
+                      setFormValues({
+                        value: event.target.value,
+                        type: event.target.id,
+                      }),
+                    debounceWaitTime
+                  )}
+                  isValid={formValues.firstName.isValid}
+                  hasIcon={true}
+                  fontAwesomeIcon={faUser}
+                  iconColor="gray"
+                />
+                <InputError
+                  isActive={formValues.firstName.isValid}
+                  message={formValues.firstName.errorMessage}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  id="lastName"
+                  placeholder="Last name"
+                  value={formValues.lastName.value}
+                  isValid={formValues.lastName.isValid}
+                  onChange={debounceHandler(
+                    (event: any) =>
+                      setFormValues({
+                        value: event.target.value,
+                        type: event.target.id,
+                      }),
+                    debounceWaitTime
+                  )}
+                  hasIcon={true}
+                  fontAwesomeIcon={faUser}
+                  iconColor="gray"
+                />
+                <InputError
+                  isActive={formValues.lastName.isValid}
+                  message={formValues.lastName.errorMessage}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  id="userName"
+                  value={formValues.userName.value}
+                  placeholder="Username"
+                  isValid={formValues.userName.isValid}
+                  onChange={debounceHandler(async (event: any) => {
+                    if (
+                      event.target.value &&
+                      (await usernameExist(event.target.value))
+                    ) {
+                      setFormValues({
+                        value: event.target.value,
+                        type: event.target.id,
+                        valid: false,
+                        customErrorMessage: "This username already exists",
+                      });
+                    } else {
+                      setFormValues({
+                        value: event.target.value,
+                        type: event.target.id,
+                        customErrorMessage:
+                          initialFormInput.userName.errorMessage,
+                      });
+                    }
+                  }, debounceWaitTime)}
+                  hasIcon={true}
+                  fontAwesomeIcon={faUser}
+                  iconColor="gray"
+                />
 
-              <InputError
-                isActive={formValues.userName.isValid}
-                message={formValues.userName.errorMessage}
-              />
-            </FormControl>
-            <FormControl>
-              <Input
-                id="email"
-                placeholder="Email"
-                value={formValues.email.value}
-                isValid={formValues.email.isValid}
-                onChange={debounceHandler(async (event: any) => {
-                  if (
-                    event.target.value &&
-                    (await emailExist(event.target.value))
-                  ) {
-                    setFormValues({
-                      value: event.target.value,
-                      type: event.target.id,
-                      valid: false,
-                      customErrorMessage: "This email already exists",
-                    });
-                  } else {
-                    setFormValues({
-                      value: event.target.value,
-                      type: event.target.id,
-                      customErrorMessage: initialFormInput.email.errorMessage,
-                    });
-                  }
-                }, debounceWaitTime)}
-                hasIcon={true}
-                fontAwesomeIcon={faAt}
-                iconColor="gray"
-              />
-              <InputError
-                isActive={formValues.email.isValid}
-                message={formValues.email.errorMessage}
-              />
-            </FormControl>
-            <FormControl>
-              <Input
-                type="password"
-                placeholder="Password"
-                value={formValues.password.value}
-                isValid={formValues.password.isValid}
-                onChange={debounceHandler(
-                  (event: any) =>
-                    setFormValues({
-                      value: event.target.value,
-                      type: event.target.id,
-                    }),
-                  debounceWaitTime
-                )}
-                id="password"
-                hasIcon={true}
-                fontAwesomeIcon={faLock}
-                iconColor="gray"
-              />
-              <InputError
-                isActive={formValues.password.isValid}
-                message={formValues.password.errorMessage}
-              />
-            </FormControl>
-            <Button
-              size="small"
-              variant="primary"
-              type="submit"
-              isDisabled={checkFormSubmission(formValues)}
-              extraStyle={{ marginTop: "10px" }}
-            >
-              Create account
-            </Button>
-          </FormGroup>
-        </Form>
+                <InputError
+                  isActive={formValues.userName.isValid}
+                  message={formValues.userName.errorMessage}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  id="email"
+                  placeholder="Email"
+                  value={formValues.email.value}
+                  isValid={formValues.email.isValid}
+                  onChange={debounceHandler(async (event: any) => {
+                    if (
+                      event.target.value &&
+                      (await emailExist(event.target.value))
+                    ) {
+                      setFormValues({
+                        value: event.target.value,
+                        type: event.target.id,
+                        valid: false,
+                        customErrorMessage: "This email already exists",
+                      });
+                    } else {
+                      setFormValues({
+                        value: event.target.value,
+                        type: event.target.id,
+                        customErrorMessage: initialFormInput.email.errorMessage,
+                      });
+                    }
+                  }, debounceWaitTime)}
+                  hasIcon={true}
+                  fontAwesomeIcon={faAt}
+                  iconColor="gray"
+                />
+                <InputError
+                  isActive={formValues.email.isValid}
+                  message={formValues.email.errorMessage}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={formValues.password.value}
+                  isValid={formValues.password.isValid}
+                  onChange={debounceHandler(
+                    (event: any) =>
+                      setFormValues({
+                        value: event.target.value,
+                        type: event.target.id,
+                      }),
+                    debounceWaitTime
+                  )}
+                  id="password"
+                  hasIcon={true}
+                  fontAwesomeIcon={faLock}
+                  iconColor="gray"
+                />
+                <InputError
+                  isActive={formValues.password.isValid}
+                  message={formValues.password.errorMessage}
+                />
+              </FormControl>
+              <Button
+                size="small"
+                variant="primary"
+                type="submit"
+                isDisabled={checkFormSubmission(formValues)}
+                extraStyle={{ marginTop: "10px" }}
+              >
+                Create account
+              </Button>
+            </FormGroup>
+          </Form>
 
-        <RegisterImageLayout>
-          <RegisterImage>
-            <Heading
-              type="h1"
-              align="left"
-              weight="bold"
-              extraStyle={{ color: "white", lineHeight: "50px" }}
-            >
-              Lama Social.
-            </Heading>
-            <Text
-              align="left"
-              extraStyle={{
-                marginTop: "30px",
-                lineHeight: "20px",
-                color: "white",
-              }}
-            >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-              eu nisi a nunc malesuada convallis. Pellentesque eu metus vel
-            </Text>
-            <Text
-              align="left"
-              extraStyle={{
-                marginTop: "30px",
-                marginBottom: "10px",
-                lineHeight: "20px",
-                color: "white",
-                width: "100%",
-              }}
-            >
-              Don't you have an account?
-            </Text>
-            <Container
-              display="flex"
-              justifyContent="start"
-              alignItem="center"
-              width="full"
-            >
-              <Href href="/#/login">
-                <Button size="small" variant="primary" type="button">
-                  Login
-                </Button>
-              </Href>
-            </Container>
-          </RegisterImage>
-          <img src={registerImageUrl} alt="image" />
-        </RegisterImageLayout>
-      </Box>
-    </Layout>
+          <RegisterImageLayout>
+            <RegisterImage>
+              <Heading
+                type="h1"
+                align="left"
+                weight="bold"
+                extraStyle={{ color: "white", lineHeight: "50px" }}
+              >
+                Lama Social.
+              </Heading>
+              <Text
+                align="left"
+                extraStyle={{
+                  marginTop: "30px",
+                  lineHeight: "20px",
+                  color: "white",
+                }}
+              >
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas eu nisi a nunc malesuada convallis. Pellentesque eu
+                metus vel
+              </Text>
+              <Text
+                align="left"
+                extraStyle={{
+                  marginTop: "30px",
+                  marginBottom: "10px",
+                  lineHeight: "20px",
+                  color: "white",
+                  width: "100%",
+                }}
+              >
+                Don't you have an account?
+              </Text>
+              <Container
+                display="flex"
+                justifyContent="start"
+                alignItem="center"
+                width="full"
+              >
+                <Href href="/#/login">
+                  <Button size="small" variant="primary" type="button">
+                    Login
+                  </Button>
+                </Href>
+              </Container>
+            </RegisterImage>
+            <img src={registerImageUrl} alt="image" />
+          </RegisterImageLayout>
+        </Box>
+      </Layout>
+    </>
   );
 };
 
