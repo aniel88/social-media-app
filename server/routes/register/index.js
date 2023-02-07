@@ -5,17 +5,17 @@ const express = require("express");
 const router = express.Router();
 
 /* Controller */
-const authController = require("../../controllers/auth");
+const registerController = require("../../controllers/register/index");
 
 /* Routers */
 /* Account created successfully routers */
-router.post("/success/:token", authController.validationToken("success"));
+router.post("/success/:token", registerController.validationToken("success"));
 
 /* Confirm email routers */
 /* [get] */
-router.get("/confirm/:token", authController.confirmAddress);
+router.get("/confirm/:token", registerController.confirmAddress);
 
 /* [post] */
-router.post("/confirm/:token", authController.validationToken("confirm"));
+router.post("/confirm/:token", registerController.validationToken("confirm"));
 
 module.exports = router;

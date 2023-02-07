@@ -5,7 +5,6 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
-import { ThemeProvider } from "@mui/material";
 import ConfirmRegister from "./pages/Register/ConfirmRegister";
 import SuccessRegister from "./pages/Register/SuccessRegister";
 

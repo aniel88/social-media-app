@@ -10,19 +10,21 @@ const checkRoutes = require("./check/index");
 
 /* Controller */
 const authController = require("../controllers/auth");
+const isAuth = require("../middlewares/isAuth");
 
 /* Routers */
 /* Login router */
 router.post("/login", authController.login);
 
+/* Check authentication route */
+router.post("/isAuth", isAuth, authController.checkAuthentication);
+
 /* Register routers */
 router.post("/register", authController.register);
 router.use("/register", registerRoutes);
 
-/* Check availability routers */
+/* Check availability for usename and email routers */
 router.use("/check", checkRoutes);
-// router.get("/checkUsername/:username", authController.checkUsernameValidation);
-// router.get("/checkEmail/:email", authController.checkEmailValidation);
 
 /* Logout router */
 router.post("/logout", authController.logout);

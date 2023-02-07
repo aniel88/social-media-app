@@ -1,5 +1,7 @@
 /* React */
-import React, { Reducer, useReducer, useState } from "react";
+import React, { Reducer, useEffect, useReducer } from "react";
+
+import type { AppDispatch } from "../../redux/store/store";
 
 /* Models */
 import { RegisterInputFormType, RegisterType } from "../../models/register";
@@ -7,7 +9,7 @@ import { RegisterInputFormType, RegisterType } from "../../models/register";
 /* Reducers */
 import { inputFormReducer, Action } from "../../redux/reducers/register/form";
 import { useDispatch, useSelector } from "react-redux/es/exports";
-import { RegisterResponse } from "../../redux/store/store";
+import { createAccount } from "../../redux/reducers/register/registerSlice";
 
 /* Axios */
 import axios from "axios";
@@ -32,6 +34,8 @@ import Form from "../../components/Form/Form";
 import Text from "../../components/Text/Text";
 import Container from "../../components/Container/Container";
 import Heading from "../../components/Heading/Heading";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import Href from "../../components/Href/Href";
 
 /* Regex */
 import { regex } from "../../utils/regex";
@@ -43,11 +47,14 @@ import { faAt } from "@fortawesome/free-solid-svg-icons";
 /* Utils */
 import { debounceHandler, debounceWaitTime } from "../../utils/debounce";
 import checkFormSubmission from "../../utils/checkFormSubmission";
+import { selectLoadingStatusCreateAccount } from "../../utils/selectors";
+import isAuth from "../../utils/isAuth";
 
 /* Assets */
 import registerImageUrl from "../../assets/register_image.jpeg";
-import Href from "../../components/Href/Href";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+
+/* Cookie */
+import { useCookies } from "react-cookie";
 
 const initialFormInput: RegisterInputFormType = {
   firstName: {
@@ -83,17 +90,20 @@ const initialFormInput: RegisterInputFormType = {
 };
 
 const Register = (): JSX.Element => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [token, setToken, removeToken] = useCookies(["access-token"]);
+  const cookieToken = token["access-token"] || undefined;
   const navigate = useNavigate();
+  const isLoading = useSelector(selectLoadingStatusCreateAccount);
+  const dispatch = useDispatch<AppDispatch>();
+
   const [formValues, setFormValues] = useReducer<Reducer<any, Action>>(
     inputFormReducer,
     initialFormInput
   );
 
-  const dispatch = useDispatch();
-  const state: RegisterResponse = useSelector(
-    (state: RegisterResponse) => state
-  );
+  useEffect(() => {
+    isAuth(cookieToken).then((_userData) => navigate("/"));
+  });
 
   const usernameExist = async (username: string) => {
     const response = await axios.get(
@@ -111,7 +121,7 @@ const Register = (): JSX.Element => {
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsLoading(true);
+
     const formInputValues: RegisterType = {
       firstName: formValues.firstName.value,
       lastName: formValues.lastName.value,
@@ -120,23 +130,14 @@ const Register = (): JSX.Element => {
       password: formValues.password.value,
     };
 
-    axios
-      .post(
-        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/register`,
-        formInputValues
-      )
-      .then((response) => {
-        navigate(`success/${response.data.successToken}`);
-      })
-      .catch((err) => {
-        console.log(err);
-        // dispatch(error());
-      });
+    dispatch(createAccount(formInputValues)).then(({ payload }: any) => {
+      navigate(`success/${payload}`);
+    });
   };
 
   return (
     <>
-      <LoadingSpinner show={isLoading} />
+      {isLoading ? <LoadingSpinner /> : ""}
       <Layout extraStyle={{ backgroundColor: "#c3beff" }}>
         <Box flexDirection="row">
           <Form onSubmit={onSubmitHandler}>

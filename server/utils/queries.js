@@ -7,7 +7,7 @@ const queries = {
   SELECT_USER_BY_USERNAME_OR_EMAIL:
     "SELECT * FROM users WHERE userName = ? OR email= ?",
   SELECT_USER_BY_USERNAME: "SELECT * FROM users WHERE userName= ?",
-  SELECT_USER_BY_EMAIL: "SELECT * FROM users WHERE email= ?",
+  SELECT_USER_BY_EMAIL: "SELECT * FROM users WHERE email = ?",
   SELECT_USER_EMAIL_BY_EMAIL: "SELECT email FROM users WHERE email= ?",
   SELECT_USER_USERNAME_BY_USERNAME:
     "SELECT userName FROM users WHERE userName = ?",

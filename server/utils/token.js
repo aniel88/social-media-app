@@ -17,8 +17,11 @@ const generate = async (data) => {
 const decode = (token) => {
   const decodePromise = new Promise((resolve, reject) => {
     jwt.verify(token, privateKey, (err, decoded) => {
-      resolve(decoded);
-      if (err) reject(err);
+      if (err) {
+        reject(err);
+      } else {
+        resolve(decoded);
+      }
     });
   });
   return decodePromise;

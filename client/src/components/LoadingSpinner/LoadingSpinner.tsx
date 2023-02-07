@@ -12,9 +12,9 @@ const baseClass = "loading-spinner";
 const templateClasses =
   "absolute flex justify-center items-center z-50 h-screen w-screen ";
 
-const LoadingSpinner = ({ show = false }: LoadingSpinnerProps) => {
+const LoadingSpinner = ({ show = true }: LoadingSpinnerProps) => {
   const className = `${baseClass} ${templateClasses}`;
-  console.log(show);
+
   const renderLoadingSpinner = () => {
     return (
       <div

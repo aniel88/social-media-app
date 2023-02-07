@@ -1,40 +1,55 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* Redux */
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-/**
- *Create interface for Register State
- *
- * @interface RegisterState
- */
-export interface RegisterState {
-  status: string;
+/* Axios */
+import axios from "axios";
+
+/* Models */
+import { RegisterType } from "../../../models/register";
+
+interface RegisterTypeState {
+  isLoading: boolean;
 }
 
-const initialState: RegisterState = {
-  status: "unknown",
+/* Initial state */
+const initialState: RegisterTypeState = {
+  isLoading: false,
 };
 
+const namespace = "register";
+
+/* Async Thunk Function */
+export const createAccount = createAsyncThunk(
+  `${namespace}/createAccount`,
+  async (formInputValues: RegisterType) => {
+    try {
+      const response = await axios.post(
+        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/register`,
+        formInputValues
+      );
+      const { successToken } = response.data;
+      return successToken;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const registerSlice = createSlice({
-  name: "register",
+  name: namespace,
   initialState,
-  reducers: {
-    success: (state) => {
-      state.status = "success";
+  reducers: {},
+  extraReducers: {
+    [createAccount.pending.toString()]: (state) => {
+      state.isLoading = true;
     },
-    pending: (state) => {
-      state.status = "pending";
+    [createAccount.fulfilled.toString()]: (state, action) => {
+      state.isLoading = false;
     },
-    error: (state) => {
-      state.status = "error";
-    },
-    unknown: (state) => {
-      state.status = "unknown";
-    },
-    warning: (state) => {
-      state.status = "warning";
+    [createAccount.rejected.toString()]: (state) => {
+      state.isLoading = false;
     },
   },
 });
 
+// export const { toggleLoading } = registerSlice.actions;
 export default registerSlice.reducer;
-
-export const { success, pending, error, unknown } = registerSlice.actions;
