@@ -12,7 +12,7 @@ const login = (req, res) => {
 
   db.query(queries.SELECT_USER_BY_EMAIL, [email], async (err, data) => {
     if (err) return res.status(500).json(err);
-    if (data.length === 0) return res.status(404).json("User not found!");
+    if (data.length === 0) return res.status(404).json("User not found");
 
     const {
       id,

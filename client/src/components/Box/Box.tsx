@@ -5,6 +5,7 @@ interface BoxProps {
   children?: React.ReactNode;
   extraStyle?: React.CSSProperties;
   flexDirection?: FlexDirection;
+  extraClassName?: string;
 }
 
 const directions = ["row", "column"] as const;
@@ -17,7 +18,7 @@ const flexDirectionsClasses = {
 
 const baseClass = "box";
 const templateClasses =
-  "flex shrink-1 justify-center items-center bg-white p-0 h-auto w-auto rounded-lg overflow-hidden shadow-2xl";
+  "flex shrink-1 justify-center items-center bg-white p-0 h-auto w-auto rounded-2xl overflow-hidden shadow-2xl";
 
 const feedbackFlexDirections = "row";
 
@@ -25,6 +26,7 @@ const Box = ({
   flexDirection = "row",
   extraStyle,
   children,
+  extraClassName,
 }: BoxProps): JSX.Element => {
   const isValidFlexDirection = directions.includes(flexDirection);
 
@@ -34,7 +36,7 @@ const Box = ({
 
   const flexDirectionClass = flexDirectionsClasses[flexDirectionKey];
 
-  const className = `${baseClass} ${templateClasses} ${flexDirectionClass}`;
+  const className = `${baseClass} ${templateClasses} ${flexDirectionClass} ${extraClassName}`;
 
   return (
     <div className={className} style={extraStyle}>
