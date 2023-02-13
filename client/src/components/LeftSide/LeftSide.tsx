@@ -24,58 +24,83 @@ interface ILeftSideProps {
   events: Array<IEventProps>;
   restaurants?: string;
   messages: Message[];
+  extraClassName?: string;
 }
 
-const LeftSide = ({ events, messages }: ILeftSideProps) => {
+const LeftSide = ({ events, messages, extraClassName }: ILeftSideProps) => {
   return (
-    <Box
-      flexDirection="column"
-      extraClassName="fixed h-[calc(100vh-6rem)] w-72 bg-gray-100 m-6 !justify-start items-start p-4 "
-    >
-      <Text weight="bold" align="left" padding="py-2" extraClassName="w-full">
-        Events
-      </Text>
-      {events.map((eventData, index) => (
-        <SideEvent
-          key={index}
-          day={eventData.day}
-          title={eventData.title}
-          month={eventData.month}
-          url={eventData.url}
-          location={eventData.location}
-        />
-      ))}
-      <Text weight="bold" align="left" padding="py-2" extraClassName="w-full">
-        Restaurants Near Your
-      </Text>
-      <div className="h-36 w-full rounded-md overflow-hidden">
-        <img className="w-full h-full" src={RestauratExample} />
-      </div>
-      <Text weight="bold" align="left" padding="py-2" extraClassName="w-full">
-        Messages
-      </Text>
-      <div className="w-full p-2">
-        <>
-          {messages.map((message, index) => {
-            return (
-              <a
-                href={message.url}
-                key={index}
-                className="flex flex-row items-center mb-5"
-              >
-                <UserIcon
-                  status={message.status}
-                  icon={message.urlIcon}
-                ></UserIcon>
-                <Text weight="normal" size="small" margin="mx-2">
-                  {message.name}
-                </Text>
-              </a>
-            );
-          })}
-        </>
-      </div>
-    </Box>
+    <div className={extraClassName}>
+      <Box
+        flexDirection="column"
+        extraClassName="fixed h-[calc(100vh-6rem)] w-32 xl:w-72 bg-gray-100 m-6 !justify-start items-start overflow-x-visible p-4 "
+      >
+        <Text
+          weight="bold"
+          align="left"
+          extraClassName="w-full text-center xl:text-left px-0 py-2 xl:p-2"
+        >
+          Events
+        </Text>
+        {events.map((eventData, index) => (
+          <SideEvent
+            key={index}
+            day={eventData.day}
+            title={eventData.title}
+            month={eventData.month}
+            url={eventData.url}
+            location={eventData.location}
+          />
+        ))}
+        <Text
+          weight="bold"
+          align="left"
+          extraClassName="w-full text-center xl:text-left px-0 py-2 xl:p-2"
+        >
+          Restaurants
+        </Text>
+        <div className="h-30 xl:h-36 w-full rounded-md overflow-hidden cursor-pointer">
+          <img className="w-full h-full" src={RestauratExample} />
+        </div>
+        <Text
+          weight="bold"
+          align="left"
+          extraClassName="w-full text-center xl:text-left px-0 py-2 xl:p-2"
+        >
+          Messages
+        </Text>
+        <div className="w-full flex xl:block flex-col items-center p-2">
+          <>
+            {messages.map((message, index) => {
+              return (
+                <a
+                  href={message.url}
+                  key={index}
+                  className="flex flex-row items-center mb-5 relative group"
+                >
+                  <UserIcon
+                    status={message.status}
+                    icon={message.urlIcon}
+                  ></UserIcon>
+                  <Text
+                    weight="normal"
+                    size="small"
+                    margin="mx-2"
+                    extraClassName="hidden xl:block absolute xl:relative group-hover:block bg-white xl:bg-transparent rounded-2xl xl:rounded-none p-2 xl:p-0 left-16 xl:left-0 w-52 xl:w-auto !text-left xl:text-right !font-bold xl:!font-normal h-18 xl:h-auto"
+                  >
+                    <>
+                      {message.name}
+                      <div className="font-normal block xl:hidden">
+                        Caterinque
+                      </div>
+                    </>
+                  </Text>
+                </a>
+              );
+            })}
+          </>
+        </div>
+      </Box>
+    </div>
   );
 };
 

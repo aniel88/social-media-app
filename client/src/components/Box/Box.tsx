@@ -18,7 +18,7 @@ const flexDirectionsClasses = {
 
 const baseClass = "box";
 const templateClasses =
-  "flex shrink-1 justify-center items-center bg-white p-0 h-auto w-auto rounded-2xl overflow-hidden shadow-2xl";
+  "flex shrink-1 justify-center items-center bg-white p-0 h-auto w-auto rounded-2xl xl:overflow-hidden shadow-2xl overflow-x-visible";
 
 const feedbackFlexDirections = "row";
 

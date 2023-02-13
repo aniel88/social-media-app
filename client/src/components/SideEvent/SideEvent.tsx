@@ -18,7 +18,8 @@ export type Location = {
 };
 
 const baseWrapperClass = "event-wrapper";
-const wrapperClasses = "flex w-full items-center justify-between my-3";
+const wrapperClasses =
+  "flex w-full items-center justify-between my-3 cursor-pointer xl:cursor-default group";
 
 const baseTemplateClass = "event-template";
 const templateClasses =
@@ -33,7 +34,8 @@ const templateMonthClasses =
   "flex w-full h-8 bottom-0 items-center justify-center text-white text-xs bg-purple-500 ";
 
 const baseEventDetails = "event-details";
-const templateEventDetails = "flex mx-3 flex-col justify-start items-start";
+const templateEventDetails =
+  "flex absolute xl:relative hidden xl:block mx-3 flex-col justify-start items-start group-hover:block left-28 xl:left-0 w-48  h-auto p-2 xl:h-auto bg-white xl:bg-transparent rounded-2xl xl:rounded-none ";
 
 const baseEventLocation = "event-location";
 const templateEventLocation = "text-xs";

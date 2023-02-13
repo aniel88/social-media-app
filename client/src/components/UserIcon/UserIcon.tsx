@@ -18,9 +18,9 @@ const baseClass = "icon";
 const statusBaseClass = "status";
 
 const templateClasses =
-  "rounded-full bg-blue-500 h-10  w-10 overflow-hidden cursor-pointer";
+  "rounded-full bg-blue-500 h-12 xl:h-10 w-12 xl:w-10 overflow-hidden cursor-pointer";
 const templateStatusClasses =
-  "absolute rounded-full border-2 border-white h-3 w-3 ";
+  "absolute rounded-full border-2 border-white h-4 xl:h-3 w-4 xl:w-3 ";
 
 const statusClasses = {
   online: "bg-green-500",

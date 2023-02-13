@@ -79,6 +79,13 @@ const messageData: Array<Message> = [
     name: "Ochis Alin",
     status: "online",
   },
+  {
+    urlIcon:
+      "https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/311010100_1535668880227539_5528203846347179944_n.jpg?stp=c0.39.200.200a_dst-jpg_p200x200&_nc_cat=111&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeGgr1BdCzhXPiKNwFE1J97PlO-Urcs2RZCU75StyzZFkNksA4GtxQqvgo9dS5fjRNR8YoFSYHDkdizn73CqsXam&_nc_ohc=FDeXUQrw5HQAX-cDCLf&_nc_ht=scontent-otp1-1.xx&oh=00_AfC4TXAL92uiMOnXmeuYwSsKj9n7QHHDofzuEYHvLS4qjA&oe=63EFC4AD",
+    url: "https://www.google.com",
+    name: "Motofelea Emanuel",
+    status: "offline",
+  },
 ];
 
 const sideGroupData: Array<ISideGroupProps> = [
@@ -132,14 +139,22 @@ const Home = (): JSX.Element => {
     <>
       <Header />
       <div className=" w-full flex justify-between h-screen bg-gray-100 ">
-        <LeftSide events={eventsData} messages={messageData} />
+        <LeftSide
+          extraClassName="hidden md:block lg:block"
+          events={eventsData}
+          messages={messageData}
+        />
         <div className="absolute inset-x-0 mx-auto my-6 p-4 2xl:max-w-screen-md md:max-w-screen-md">
           {" "}
           <Box extraClassName="my-2">asd</Box>
           <Box extraClassName="my-2">asd</Box>
         </div>
 
-        <RightSide menu={sideMenuData} groups={sideGroupData} />
+        <RightSide
+          extraClassName="hidden md:block lg:block"
+          menu={sideMenuData}
+          groups={sideGroupData}
+        />
       </div>
     </>
   );

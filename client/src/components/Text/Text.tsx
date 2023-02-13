@@ -2,7 +2,7 @@
 import React from "react";
 
 interface TextProps {
-  children?: string;
+  children?: string | JSX.Element | JSX.Element[];
   weight?: TextWeight;
   size?: TextSize;
   align?: TextAlign;
