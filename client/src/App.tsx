@@ -10,7 +10,7 @@ import SuccessRegister from "./pages/Register/SuccessRegister";
 
 function App() {
   return (
-    <div>
+    <div className="h-full">
       <HashRouter>
         <Routes>
           <Route path="/" element={<Home />} />

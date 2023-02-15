@@ -10,7 +10,7 @@ interface NavbarProps {
 
 const baseClass = "navbar";
 const templateClasses =
-  "flex h-14 w-100 p-6 flex-row items-center bg-purple-500 justify-between sticky top-0 z-50";
+  "flex h-14 w-100 p-6 flex-row items-center bg-purple-500 justify-between sticky top-0 z-40";
 
 const Navbar = ({ children, extraStyle }: NavbarProps) => {
   const className = `${baseClass} ${templateClasses} `;

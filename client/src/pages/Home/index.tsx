@@ -38,6 +38,8 @@ import gamerXCommunityImage from "../../assets/gamerXCommunnity.jpeg";
 import photoshopImage from "../../assets/photoshop.jpeg";
 import cssImage from "../../assets/css.jpeg";
 import codImage from "../../assets/callofduty.jpeg";
+import AddPost from "../../components/AddPost/AddPost";
+import Post from "../../components/Post/Post";
 
 /* Data for Right side and Left side */
 const eventsData: Array<IEventProps> = [
@@ -137,17 +139,27 @@ const Home = (): JSX.Element => {
 
   return (
     <>
-      <Header />
-      <div className=" w-full flex justify-between h-screen bg-gray-100 ">
+      <Header menu={sideMenuData} />
+      <div className=" w-full flex justify-between h-full bg-gray-100 ">
         <LeftSide
           extraClassName="hidden md:block lg:block"
           events={eventsData}
           messages={messageData}
         />
-        <div className="absolute inset-x-0 mx-auto my-6 p-4 2xl:max-w-screen-md md:max-w-screen-md">
+        <div className="inset-x-0 mx-auto my-6 p-4 w-full md:w-1/2 lg:max-w-4xl">
           {" "}
-          <Box extraClassName="my-2">asd</Box>
-          <Box extraClassName="my-2">asd</Box>
+          <Box extraClassName="mb-10 p-5">
+            <AddPost />
+          </Box>
+          <Box extraClassName="mb-10 p-5">
+            <Post />
+          </Box>
+          <Box extraClassName="mb-10 p-5">
+            <Post />
+          </Box>
+          <Box extraClassName="mb-10 p-5">
+            <Post />
+          </Box>
         </div>
 
         <RightSide

@@ -7,6 +7,7 @@ import defaultUserImage from "../../assets/default-user-image.jpg";
 interface UserIconProps {
   icon?: string;
   status?: UserStatus;
+  showStatus?: boolean;
   children?: JSX.Element | JSX.Element[];
   onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
@@ -33,6 +34,7 @@ const feedBackStatus = "offline";
 const UserIcon = ({
   icon = defaultUserImage,
   status = "offline",
+  showStatus = true,
   children,
   onClick,
 }: UserIconProps) => {
@@ -46,7 +48,7 @@ const UserIcon = ({
 
   return (
     <div onClick={onClick} className={className}>
-      <div className={statusClassName} title={status}></div>
+      {showStatus ? <div className={statusClassName} title={status}></div> : ""}
       <img src={icon} alt="user image" />
       {children}
     </div>

@@ -67,7 +67,7 @@ const initialFormInput: LoginInputFormType = {
   password: {
     value: "",
     isValid: undefined,
-    regex: new RegExp(regex.password),
+    regex: new RegExp(""),
     errorMessage: "Password error message",
   },
 };
