@@ -1,23 +1,73 @@
 /* React */
+import React, { SetStateAction, useContext, useEffect, useState } from "react";
+
+/* Font Awesome */
 import {
-  faComment,
   faComments,
   faEllipsis,
   faHeart,
   faShare,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
-import AddComment from "../AddComment/AddComment";
+/* 
+Componets */
 import Button from "../Button/Button";
-import Comment from "../Comment/Comment";
 import UserIcon from "../UserIcon/UserIcon";
+import Comments from "../Comments/Comments";
+import { ICommentProps } from "../Comment/Comment";
 
-const Post = () => {
+/* Axios */
+import axios from "axios";
+
+/* Context */
+import { UserContext } from "../../pages/Home";
+
+/* Utils */
+import { convertMySqlBoolean } from "../../utils/convertMySqlBoolean";
+import { formatPostDate } from "../../utils/formatPostDate";
+
+export interface IPostProps {
+  firstName: string;
+  lastName: string;
+  id: number;
+  desc?: string;
+  img?: string;
+  userId: number;
+  createdAt: string;
+  likes: number;
+  comments: number;
+  liked: string;
+}
+
+type commentDataType = {
+  page: number;
+  data: Array<ICommentProps>;
+};
+
+const initialCommentsData = { page: 0, data: [] };
+const limit = 3;
+
+const Post = ({
+  firstName,
+  lastName,
+  id,
+  createdAt,
+  desc,
+  userId,
+  comments,
+  likes,
+  liked,
+  img,
+}: IPostProps) => {
+  const userData = useContext(UserContext);
+  const [commentsData, setCommentsData] =
+    useState<commentDataType>(initialCommentsData);
   const [showComments, setShowComments] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [showMore, setShowMore] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(convertMySqlBoolean(liked));
+  const [numberOfComments, setNumberOfComments] = useState(comments);
+  const [numberOfLikes, setNumberOfLikes] = useState(likes);
 
   const handleScroll = () => {
     const currentScrollPos = window.scrollY;
@@ -27,27 +77,59 @@ const Post = () => {
     }
   };
 
+  const incrementCommentLikesOnCommentAddedAction = (event: any) => {
+    setNumberOfComments(numberOfComments + 1);
+
+    setCommentsData((prevComments: any) => {
+      return {
+        page: prevComments.page,
+        data: [event, ...prevComments.data],
+      };
+    });
+  };
+
+  const fetchMoreComments = async () => {
+    const comments = await axios.get(
+      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/comments/${id}?limit=${limit}&page=${commentsData.page}`
+    );
+
+    setCommentsData((prevComments: any) => {
+      return {
+        page: prevComments.page + 1,
+        data: [...prevComments.data, ...comments.data],
+      };
+    });
+  };
+
   useEffect(() => {
+    const fetchComments = async () => {
+      const comments = await axios.get(
+        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/comments/${id}?limit=${limit}&page=${commentsData.page}`
+      );
+
+      setCommentsData({ page: 1, data: comments.data });
+    };
+
+    fetchComments();
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
-  });
+  }, []);
 
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-row user-details items-center">
         <div className="user-image p-2">
-          <UserIcon
-            showStatus={false}
-            icon="https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/307840742_5590371681025446_113209348334201931_n.jpg?stp=dst-jpg_p200x200&_nc_cat=109&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeEoN3cSXjMWVPRd04qFQ6seVDiRpsFMQ1ZUOJGmwUxDVmE8hDWjua2qN6gberuAixBtSiqH3jDgeAvjK3ZP8xuD&_nc_ohc=AV9yFP3-3LYAX9sarEm&tn=n3O6v_yY3uAmZKrx&_nc_ht=scontent-otp1-1.xx&oh=00_AfAaMQVmIVFOoB1AtuVZ8uDc3QOUA6ETUIBu4zA1lKzNeA&oe=63E8384A"
-          />
+          <UserIcon showStatus={false} icon="" />
         </div>
 
         <div className="flex flex-row w-full justify-between p-2">
           <div className="flex flex-col user-data">
-            <div className="user-name font-bold">Morohoschi Daniel</div>
+            <div className="user-name font-bold">
+              {firstName} {lastName}
+            </div>
             <div className="date text-gray-400 text-sm">
-              Dec 33 2021, 12:40 pm
+              {formatPostDate(createdAt)}
             </div>
           </div>
           <div className="relative overflow-visible">
@@ -70,12 +152,22 @@ const Post = () => {
         </div>
       </div>
       <div className="flex flex-col post-details p-2">
-        <div className="post-description text-gray-500 text-sm">
-          Post Description
-        </div>
-        <div className="post rounded-2xl m-3 overflow-hidden">
-          <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" />{" "}
-        </div>
+        <div className="post-description text-gray-500 text-sm">{desc}</div>
+        {img ? (
+          <div className="post max-h-96 rounded-2xl my-3 overflow-hidden">
+            <img
+              className="bg-cover min-w-full min-h-full bg-center"
+              src={
+                img.includes("blob")
+                  ? img
+                  : `http://localhost:8080/uploads/posts/${img}`
+              }
+            />
+          </div>
+        ) : (
+          ""
+        )}
+
         <div className="flex flex-row justify-start p-2">
           <button
             onClick={() => setIsLiked(!isLiked)}
@@ -87,7 +179,7 @@ const Post = () => {
               icon={faHeart}
               title="Like"
             />
-            <span className="text-sm mx-2">3 likes</span>
+            <span className="text-sm mx-2">{numberOfLikes} likes</span>
           </button>
           <button
             onClick={() => setShowComments(!showComments)}
@@ -100,7 +192,7 @@ const Post = () => {
               icon={faComments}
               title="Comments"
             />
-            <span className="text-sm mx-2">3 comments</span>
+            <span className="text-sm mx-2">{numberOfComments} comments</span>
           </button>
           <div className="post-buttons mr-3 cursor-pointer">
             {" "}
@@ -114,30 +206,15 @@ const Post = () => {
         </div>
       </div>
       {showComments ? (
-        <div className="flex flex-col comments p-2">
-          <AddComment
-            imageUrl="https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/307840742_5590371681025446_113209348334201931_n.jpg?stp=dst-jpg_p200x200&_nc_cat=109&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeEoN3cSXjMWVPRd04qFQ6seVDiRpsFMQ1ZUOJGmwUxDVmE8hDWjua2qN6gberuAixBtSiqH3jDgeAvjK3ZP8xuD&_nc_ohc=AV9yFP3-3LYAX9sarEm&tn=n3O6v_yY3uAmZKrx&_nc_ht=scontent-otp1-1.xx&oh=00_AfAaMQVmIVFOoB1AtuVZ8uDc3QOUA6ETUIBu4zA1lKzNeA&oe=63E8384A"
-            onAddComment={(event: any) => console.log(event)}
-          />
-          <Comment
-            imageUrl="https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/307840742_5590371681025446_113209348334201931_n.jpg?stp=dst-jpg_p200x200&_nc_cat=109&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeEoN3cSXjMWVPRd04qFQ6seVDiRpsFMQ1ZUOJGmwUxDVmE8hDWjua2qN6gberuAixBtSiqH3jDgeAvjK3ZP8xuD&_nc_ohc=AV9yFP3-3LYAX9sarEm&tn=n3O6v_yY3uAmZKrx&_nc_ht=scontent-otp1-1.xx&oh=00_AfAaMQVmIVFOoB1AtuVZ8uDc3QOUA6ETUIBu4zA1lKzNeA&oe=63E8384A"
-            userName="Morohoschi Daniel-Iosif"
-            message="Awesome message"
-            timeOfComment="2 minutes ago"
-          />{" "}
-          <Comment
-            imageUrl="https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/307840742_5590371681025446_113209348334201931_n.jpg?stp=dst-jpg_p200x200&_nc_cat=109&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeEoN3cSXjMWVPRd04qFQ6seVDiRpsFMQ1ZUOJGmwUxDVmE8hDWjua2qN6gberuAixBtSiqH3jDgeAvjK3ZP8xuD&_nc_ohc=AV9yFP3-3LYAX9sarEm&tn=n3O6v_yY3uAmZKrx&_nc_ht=scontent-otp1-1.xx&oh=00_AfAaMQVmIVFOoB1AtuVZ8uDc3QOUA6ETUIBu4zA1lKzNeA&oe=63E8384A"
-            userName="Morohoschi Daniel-Iosif"
-            message="Awesome message"
-            timeOfComment="2 minutes ago"
-          />{" "}
-          <Comment
-            imageUrl="https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/307840742_5590371681025446_113209348334201931_n.jpg?stp=dst-jpg_p200x200&_nc_cat=109&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeEoN3cSXjMWVPRd04qFQ6seVDiRpsFMQ1ZUOJGmwUxDVmE8hDWjua2qN6gberuAixBtSiqH3jDgeAvjK3ZP8xuD&_nc_ohc=AV9yFP3-3LYAX9sarEm&tn=n3O6v_yY3uAmZKrx&_nc_ht=scontent-otp1-1.xx&oh=00_AfAaMQVmIVFOoB1AtuVZ8uDc3QOUA6ETUIBu4zA1lKzNeA&oe=63E8384A"
-            userName="Morohoschi Daniel-Iosif"
-            message="Awesome message"
-            timeOfComment="2 minutes ago"
-          />
-        </div>
+        <Comments
+          numberOfComments={numberOfComments}
+          comments={commentsData.data}
+          postId={id}
+          onCommentAdded={(event: any) =>
+            incrementCommentLikesOnCommentAddedAction(event)
+          }
+          onShowMore={() => fetchMoreComments()}
+        />
       ) : (
         ""
       )}

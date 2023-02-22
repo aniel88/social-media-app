@@ -112,10 +112,7 @@ const Header = ({ menu }: IHeaderProps) => {
           </NavItem>
           <NavItem icon={faCaretDown} title="Menu">
             <DropdownMenu>
-              <DropdownItemUserInfo
-                imageUrl="https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/307840742_5590371681025446_113209348334201931_n.jpg?stp=dst-jpg_p200x200&_nc_cat=109&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeEoN3cSXjMWVPRd04qFQ6seVDiRpsFMQ1ZUOJGmwUxDVmE8hDWjua2qN6gberuAixBtSiqH3jDgeAvjK3ZP8xuD&_nc_ohc=AV9yFP3-3LYAX9sarEm&tn=n3O6v_yY3uAmZKrx&_nc_ht=scontent-otp1-1.xx&oh=00_AfAaMQVmIVFOoB1AtuVZ8uDc3QOUA6ETUIBu4zA1lKzNeA&oe=63E8384A"
-                name="Morohoshi Daniel-Iosif"
-              />
+              <DropdownItemUserInfo imageUrl="" name="Morohoshi Daniel-Iosif" />
               <>
                 {menuItems.map((item, id) => (
                   <DropdownItem

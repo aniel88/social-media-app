@@ -2,6 +2,8 @@ const queries = {
   /* ADD */
   ADD_USER:
     "INSERT INTO users (`userName`, `email`, `password`, `firstName`, `lastName`,`isValidate`, `validationToken`, `successToken`) values (?, ?, ?, ?, ?, ?, ?, ?)",
+  ADD_POST:
+    "INSERT INTO posts (`userId`, `desc`, `img`, `createdAt`) values (?, ?, ?, ?)",
 
   /* SELECT */
   SELECT_USER_BY_USERNAME_OR_EMAIL:

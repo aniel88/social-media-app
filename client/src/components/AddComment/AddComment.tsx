@@ -1,6 +1,7 @@
 /* React */
 import React, { useState } from "react";
-import { useLinkClickHandler } from "react-router-dom";
+
+/* Components */
 import Button from "../Button/Button";
 import UserIcon from "../UserIcon/UserIcon";
 
@@ -12,7 +13,7 @@ interface IAddCommentProps {
 const AddComment = ({ imageUrl, onAddComment }: IAddCommentProps) => {
   const [comment, setComment] = useState("");
 
-  const commentInputHandler = (event: any) => {
+  const commentInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setComment(event.target.value);
   };
 

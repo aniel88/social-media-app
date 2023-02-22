@@ -7,7 +7,10 @@ type ButtonProps = {
   isDisabled?: boolean;
   extraStyle?: React.CSSProperties;
   type?: ButtonType;
-  onClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
+  onClick?: () =>
+    | React.MouseEventHandler<HTMLButtonElement>
+    | void
+    | Promise<void>;
 };
 
 const variants = [

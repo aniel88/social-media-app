@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const token = require("../utils/token");
 
 const isAuth = async (req, res, next) => {
+ 
   const accessToken =
     req.body.token || req.query.token || req.headers["x-access-token"];
 
@@ -9,8 +10,9 @@ const isAuth = async (req, res, next) => {
     try {
       const decoded = await token.decode(accessToken);
       req.userData = decoded;
+
       next();
-    } catch {
+    } catch (_err) {
       res.status(401).json("Invalid Token");
     }
   } else {

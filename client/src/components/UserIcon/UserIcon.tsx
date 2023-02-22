@@ -39,7 +39,6 @@ const UserIcon = ({
   onClick,
 }: UserIconProps) => {
   const isValidStatus = statuses.includes(status);
-
   const statusKey = isValidStatus ? status : feedBackStatus;
 
   const statusClass = statusClasses[statusKey];
@@ -49,7 +48,7 @@ const UserIcon = ({
   return (
     <div onClick={onClick} className={className}>
       {showStatus ? <div className={statusClassName} title={status}></div> : ""}
-      <img src={icon} alt="user image" />
+      <img src={icon ? icon : defaultUserImage} alt="user image" />
       {children}
     </div>
   );

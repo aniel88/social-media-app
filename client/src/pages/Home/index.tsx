@@ -1,5 +1,8 @@
 /* React */
-import React, { useEffect } from "react";
+import React, { createContext, useEffect, useState } from "react";
+
+/* Query-string */
+import queryString from "query-string";
 
 /* Cookie */
 import { useCookies } from "react-cookie";
@@ -16,10 +19,13 @@ import { IEventProps } from "../../components/SideEvent/SideEvent";
 import Header from "../../components/Heading/Header";
 import LeftSide, { Message } from "../../components/LeftSide/LeftSide";
 import RightSide from "../../components/RightSide/RightSide";
+import AddPost, { IAddedPost } from "../../components/AddPost/AddPost";
+import Post, { IPostProps } from "../../components/Post/Post";
 
 /* Interfaces */
 import { ISideMenuProps } from "../../components/SideMenu/SideMenu";
 import { ISideGroupProps } from "../../components/SideGroup/SideGroup";
+import { User } from "../../models/user";
 
 /* Utils */
 import isAuth from "../../utils/isAuth";
@@ -38,8 +44,6 @@ import gamerXCommunityImage from "../../assets/gamerXCommunnity.jpeg";
 import photoshopImage from "../../assets/photoshop.jpeg";
 import cssImage from "../../assets/css.jpeg";
 import codImage from "../../assets/callofduty.jpeg";
-import AddPost from "../../components/AddPost/AddPost";
-import Post from "../../components/Post/Post";
 
 /* Data for Right side and Left side */
 const eventsData: Array<IEventProps> = [
@@ -61,29 +65,25 @@ const eventsData: Array<IEventProps> = [
 
 const messageData: Array<Message> = [
   {
-    urlIcon:
-      "https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/307840742_5590371681025446_113209348334201931_n.jpg?stp=dst-jpg_p200x200&_nc_cat=109&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeEoN3cSXjMWVPRd04qFQ6seVDiRpsFMQ1ZUOJGmwUxDVmE8hDWjua2qN6gberuAixBtSiqH3jDgeAvjK3ZP8xuD&_nc_ohc=AV9yFP3-3LYAX9sarEm&tn=n3O6v_yY3uAmZKrx&_nc_ht=scontent-otp1-1.xx&oh=00_AfAaMQVmIVFOoB1AtuVZ8uDc3QOUA6ETUIBu4zA1lKzNeA&oe=63E8384A",
+    urlIcon: "",
     url: "https://www.google.com",
     name: "Morohoschi Daniel-Iosif",
     status: "online",
   },
   {
-    urlIcon:
-      "https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/237052691_4060455614053345_1199709775228937183_n.jpg?stp=c0.9.200.200a_dst-jpg_p200x200&_nc_cat=100&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeEA7WKeQx2L-uMxP75SKyXNb4m33OtqYT9vibfc62phP-VgXB91cPe1p0HXFUBPgBAuZ2-Jx1ALRvuXa6DUC-yp&_nc_ohc=5F4v5E5IW0IAX_7Ixf5&_nc_ht=scontent-otp1-1.xx&oh=00_AfAs99VXVqP410ZbuZd0maMJyUGJQvVUwJvoNzaofC1oBw&oe=63EB5432",
+    urlIcon: "",
     url: "https://www.google.com",
     name: "Alexandru Gabriel",
     status: "away",
   },
   {
-    urlIcon:
-      "https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/312016986_8288044681268503_8211581930910836586_n.jpg?stp=dst-jpg_s200x200&_nc_cat=102&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeGDjfQHBnoOD_0utEtngpEc-QCcDgZuLvH5AJwOBm4u8ew3DvRrQUTFsMG5Zae9yHPCj6I3g5EV9Yyssvqpdmug&_nc_ohc=jGSy0C1uZ5MAX98FbPN&tn=n3O6v_yY3uAmZKrx&_nc_ht=scontent-otp1-1.xx&oh=00_AfCMMXdb8DOIjgKxW7Pff1nrlsGYLtyU9jwrT6swfgWxZw&oe=63EA7711",
+    urlIcon: "",
     url: "https://www.google.com",
     name: "Ochis Alin",
     status: "online",
   },
   {
-    urlIcon:
-      "https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-1/311010100_1535668880227539_5528203846347179944_n.jpg?stp=c0.39.200.200a_dst-jpg_p200x200&_nc_cat=111&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeGgr1BdCzhXPiKNwFE1J97PlO-Urcs2RZCU75StyzZFkNksA4GtxQqvgo9dS5fjRNR8YoFSYHDkdizn73CqsXam&_nc_ohc=FDeXUQrw5HQAX-cDCLf&_nc_ht=scontent-otp1-1.xx&oh=00_AfC4TXAL92uiMOnXmeuYwSsKj9n7QHHDofzuEYHvLS4qjA&oe=63EFC4AD",
+    urlIcon: "",
     url: "https://www.google.com",
     name: "Motofelea Emanuel",
     status: "offline",
@@ -126,19 +126,115 @@ const sideMenuData: Array<ISideMenuProps> = [
   },
 ];
 
+interface IInitialData {
+  userData: User;
+  postData: Array<IPostProps>;
+}
+
+const initialData: IInitialData = {
+  userData: {
+    email: "",
+    firstName: "",
+    iat: 0,
+    id: 0,
+    isValidate: 0,
+    lastName: "",
+  },
+  postData: [],
+};
+export const UserContext = createContext<User>(initialData.userData);
+
 const Home = (): JSX.Element => {
+  const [data, setData] = useState(initialData);
   const navigate = useNavigate();
+
   const [token, setToken, removeToken] = useCookies(["access-token"]);
   const cookieToken = token["access-token"] || undefined;
 
+  let page = 0;
+  let hasMorePosts = true;
+  let limit = 10;
+
   useEffect(() => {
-    isAuth(cookieToken)
-      .then((userData) => console.log(userData))
-      .catch((_err) => navigate("/login"));
+    window.addEventListener("scroll", infiniteScroll);
+
+    /* Fetch posts */
+    const fetchData = async () => {
+      let userData: User = {
+        email: "",
+        firstName: "",
+        iat: 0,
+        id: 0,
+        isValidate: 0,
+        lastName: "",
+      };
+
+      /* Check user authentication */
+      try {
+        userData = await isAuth(cookieToken);
+        const postData = await axios.get(
+          `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/posts/${userData.id}?limit=${limit}&page=${page}`
+        );
+        setData({ userData, postData: postData.data });
+      } catch (err) {
+        navigate("/login");
+      }
+    };
+
+    fetchData();
   }, []);
 
+  const infiniteScroll = async () => {
+    const windowInnerHeight = window.innerHeight;
+    const scrollToTop = document.documentElement.scrollTop;
+    const offsetHeight = document.documentElement.offsetHeight;
+
+    if (windowInnerHeight + scrollToTop === offsetHeight) {
+      if (hasMorePosts) {
+        const postData = await axios.get(
+          `http://${process.env.REACT_APP_DOMAIN}:${
+            process.env.REACT_APP_SERVER_PORT
+          }/api/posts/130?limit=${limit}&page=${(page += 1)}`
+        );
+
+        postData.data.length === 0
+          ? (hasMorePosts = false)
+          : (hasMorePosts = true);
+
+        setData((prevData) => {
+          return {
+            userData: prevData.userData,
+            postData: [...prevData.postData, ...postData.data],
+          };
+        });
+      }
+    }
+  };
+
+  const handleAddPost = (event: IAddedPost) => {
+    setData((prevData) => {
+      const postAdded: IPostProps = {
+        firstName: data.userData.firstName,
+        lastName: data.userData.lastName,
+        id: 0,
+        desc: event.description,
+        userId: data.userData.id,
+        createdAt: "just now",
+        img: event.imageUrl,
+        likes: 0,
+        comments: 0,
+        liked: "",
+      };
+
+      return {
+        userData: prevData.userData,
+        postData: [postAdded, ...prevData.postData],
+      };
+    });
+  };
+
   return (
-    <>
+    <UserContext.Provider value={data.userData}>
       <Header menu={sideMenuData} />
       <div className=" w-full flex justify-between h-full bg-gray-100 ">
         <LeftSide
@@ -147,19 +243,16 @@ const Home = (): JSX.Element => {
           messages={messageData}
         />
         <div className="inset-x-0 mx-auto my-6 p-4 w-full md:w-1/2 lg:max-w-4xl">
-          {" "}
+          {/* Add post section */}
           <Box extraClassName="mb-10 p-5">
-            <AddPost />
+            <AddPost onAddPost={(event: IAddedPost) => handleAddPost(event)} />
           </Box>
-          <Box extraClassName="mb-10 p-5">
-            <Post />
-          </Box>
-          <Box extraClassName="mb-10 p-5">
-            <Post />
-          </Box>
-          <Box extraClassName="mb-10 p-5">
-            <Post />
-          </Box>
+          {/* Posts sections */}
+          {data.postData.map((post, index) => (
+            <Box key={index} extraClassName="mb-10 p-5">
+              <Post {...post} />
+            </Box>
+          ))}
         </div>
 
         <RightSide
@@ -168,7 +261,7 @@ const Home = (): JSX.Element => {
           groups={sideGroupData}
         />
       </div>
-    </>
+    </UserContext.Provider>
   );
 };
 
