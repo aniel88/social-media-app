@@ -23,14 +23,7 @@ const Comment = ({
   id = 0,
 }: ICommentProps) => {
   return (
-    <div className="flex flex-col relative group">
-      <div className="absolute top-2 right-0">
-        <FontAwesomeIcon
-          className="hidden group-hover:block cursor-pointer text-red-500"
-          icon={faCircleXmark}
-          title="Delete"
-        />
-      </div>
+    <div className="flex flex-col relative">
       <div className="flex flex-row items-center justify-between mt-3 ">
         <div className="flex flex-row items-center text-sm">
           <UserIcon showStatus={false} icon={profilePic} />
@@ -45,11 +38,11 @@ const Comment = ({
           {Number(createdAt) !== 0 ? formatPostDate(createdAt) : createdAt}
         </div>
       </div>
-      <div className="ml-12 text-sm">
+      {/* <div className="ml-12 text-sm">
         <button className="text-blue-400 cursor-pointer hover:underline">
           Delete
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

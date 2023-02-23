@@ -216,7 +216,7 @@ const Home = (): JSX.Element => {
       const postAdded: IPostProps = {
         firstName: data.userData.firstName,
         lastName: data.userData.lastName,
-        id: 0,
+        id: event.id,
         desc: event.description,
         userId: data.userData.id,
         createdAt: "just now",

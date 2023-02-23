@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import React, { createRef, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import Button from "../Button/Button";
 import HorizontalLine from "../HorizontalLine/HorizontalLine";
@@ -19,6 +19,7 @@ export interface IAddPostProps {
 export interface IAddedPost {
   imageUrl?: string;
   description: string;
+  id: number;
 }
 
 const AddPost = ({ onAddPost }: IAddPostProps) => {
@@ -52,7 +53,7 @@ const AddPost = ({ onAddPost }: IAddPostProps) => {
     formData.append("postImage", image[0]);
     formData.append("description", description);
 
-    const response = await axios.post(
+    const addedPostId = await axios.post(
       `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/posts/add`,
       formData,
       {
@@ -63,7 +64,7 @@ const AddPost = ({ onAddPost }: IAddPostProps) => {
       }
     );
 
-    onAddPost({ imageUrl: imageUrl, description });
+    onAddPost({ imageUrl: imageUrl, description, id: addedPostId.data });
     setImageUrl("");
     setDescription("");
   };
@@ -137,7 +138,7 @@ const AddPost = ({ onAddPost }: IAddPostProps) => {
           </button>
         </div>
         <Button
-          isDisabled={description.length === 0 || imageUrl.length === 0}
+          isDisabled={description.length === 0 && imageUrl.length === 0}
           size="small"
           onClick={() => onAddPostHandler()}
         >

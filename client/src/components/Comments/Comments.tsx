@@ -26,7 +26,7 @@ const Comments = ({
   const { id: userId, profilePic, lastName, firstName } = userData;
 
   const addCommentHandler = async (event: string) => {
-    await axios.post(
+    const commentId = await axios.post(
       `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/comments/${postId}`,
       { description: event, userId }
     );
@@ -36,7 +36,7 @@ const Comments = ({
       firstName,
       description: event,
       createdAt: "just now",
-      id: 0,
+      id: commentId.data,
     });
   };
 

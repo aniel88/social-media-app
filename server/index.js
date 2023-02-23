@@ -30,8 +30,8 @@ app.use(cors());
 app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/posts/", postRoutes);
-app.use("/api/comments/", commentRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
 
 app.listen(PORT || 3030, () => {
   console.log(`Server listening on ${PORT}`);
