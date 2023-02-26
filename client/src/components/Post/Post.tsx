@@ -1,6 +1,9 @@
 /* React */
 import React, { SetStateAction, useContext, useEffect, useState } from "react";
 
+/*Crypto*/
+import { encrypt, decrypt } from "../../utils/crypto";
+
 /* Font Awesome */
 import {
   faComments,
@@ -25,6 +28,7 @@ import { UserContext } from "../../pages/Home";
 /* Utils */
 import { convertMySqlBoolean } from "../../utils/convertMySqlBoolean";
 import { formatPostDate } from "../../utils/formatPostDate";
+import { formatQueryParam } from "../../utils/formatQueryParams";
 
 export interface IPostProps {
   firstName: string;
@@ -37,6 +41,12 @@ export interface IPostProps {
   likes: number;
   comments: number;
   liked: string;
+  onDeletePost?: any;
+}
+
+interface ILike {
+  isActive: boolean;
+  count: number;
 }
 
 type commentDataType = {
@@ -44,7 +54,8 @@ type commentDataType = {
   data: Array<ICommentProps>;
 };
 
-const initialCommentsData = { page: 0, data: [] };
+const initialCommentsData: commentDataType = { page: 0, data: [] };
+const initialLikeData: ILike = { isActive: false, count: 0 };
 const limit = 3;
 
 const Post = ({
@@ -58,6 +69,7 @@ const Post = ({
   likes,
   liked,
   img,
+  onDeletePost,
 }: IPostProps) => {
   const userData = useContext(UserContext);
   const [commentsData, setCommentsData] =
@@ -65,9 +77,11 @@ const Post = ({
   const [showComments, setShowComments] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [showMore, setShowMore] = useState(false);
-  const [isLiked, setIsLiked] = useState(convertMySqlBoolean(liked));
+  const [like, setLike] = useState<ILike | null>({
+    count: likes,
+    isActive: convertMySqlBoolean(liked),
+  });
   const [numberOfComments, setNumberOfComments] = useState(comments);
-  const [numberOfLikes, setNumberOfLikes] = useState(likes);
 
   const handleScroll = () => {
     const currentScrollPos = window.scrollY;
@@ -80,7 +94,7 @@ const Post = ({
   const incrementCommentLikesOnCommentAddedAction = (event: any) => {
     setNumberOfComments(numberOfComments + 1);
 
-    setCommentsData((prevComments: any) => {
+    setCommentsData((prevComments) => {
       return {
         page: prevComments.page,
         data: [event, ...prevComments.data],
@@ -93,12 +107,51 @@ const Post = ({
       `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/comments/${id}?limit=${limit}&page=${commentsData.page}`
     );
 
-    setCommentsData((prevComments: any) => {
+    setCommentsData((prevComments) => {
       return {
         page: prevComments.page + 1,
         data: [...prevComments.data, ...comments.data],
       };
     });
+  };
+
+  const deletePostHandler = async () => {
+    try {
+      await axios.delete(
+        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/posts/${id}`
+      );
+      onDeletePost(id);
+    } catch (_err) {}
+  };
+
+  const onLikePostHandler = async () => {
+    const encryptedUserId = encrypt(userData.id.toString());
+    const encryptedUserIdFormatted = formatQueryParam(encryptedUserId);
+
+    const encryptedPostId = encrypt(id.toString());
+    const encryptedPostIdFormatted = formatQueryParam(encryptedPostId);
+
+    if (like?.isActive) {
+      await axios.delete(
+        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/like?postId=${encryptedPostIdFormatted}&userId=${encryptedUserIdFormatted}`
+      );
+      setLike((prevLike) => {
+        return {
+          isActive: false,
+          count: (prevLike!.count -= 1),
+        };
+      });
+    } else {
+      await axios.put(
+        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/like?postId=${encryptedPostIdFormatted}&userId=${encryptedUserIdFormatted}`
+      );
+      setLike((prevLike) => {
+        return {
+          isActive: true,
+          count: (prevLike!.count += 1),
+        };
+      });
+    }
   };
 
   useEffect(() => {
@@ -141,7 +194,12 @@ const Post = ({
             </button>
             {showMore ? (
               <div className="absolute flex justify-center items-center right-1 bg-white h-auto w-auto p-4 rounded-2xl">
-                <Button type="button" size="small" variant="danger">
+                <Button
+                  type="button"
+                  size="small"
+                  variant="danger"
+                  onClick={deletePostHandler}
+                >
                   Delete
                 </Button>
               </div>
@@ -170,16 +228,16 @@ const Post = ({
 
         <div className="flex flex-row justify-start p-2">
           <button
-            onClick={() => setIsLiked(!isLiked)}
+            onClick={() => onLikePostHandler()}
             className="post-buttons mr-3 cursor-pointer"
           >
             <FontAwesomeIcon
-              className={isLiked ? "text-red-500" : "text-gray-400"}
+              className={like?.isActive ? "text-red-500" : "text-gray-400"}
               type="regular"
               icon={faHeart}
               title="Like"
             />
-            <span className="text-sm mx-2">{numberOfLikes} likes</span>
+            <span className="text-sm mx-2">{like!.count} likes</span>
           </button>
           <button
             onClick={() => setShowComments(!showComments)}

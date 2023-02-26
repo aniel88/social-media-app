@@ -147,10 +147,9 @@ export const UserContext = createContext<User>(initialData.userData);
 const Home = (): JSX.Element => {
   const [data, setData] = useState(initialData);
   const navigate = useNavigate();
-
   const [token, setToken, removeToken] = useCookies(["access-token"]);
   const cookieToken = token["access-token"] || undefined;
-
+  console.log(data.postData[0]);
   let page = 0;
   let hasMorePosts = true;
   let limit = 10;
@@ -211,7 +210,18 @@ const Home = (): JSX.Element => {
     }
   };
 
-  const handleAddPost = (event: IAddedPost) => {
+  const deletePostHandler = (event: any) => {
+    const filtredData = data.postData.filter((post) => post.id !== event);
+
+    setData((current) => {
+      return {
+        userData: current.userData,
+        postData: current.postData.filter((post) => post.id !== event),
+      };
+    });
+  };
+
+  const addPostHandler = (event: IAddedPost) => {
     setData((prevData) => {
       const postAdded: IPostProps = {
         firstName: data.userData.firstName,
@@ -245,12 +255,24 @@ const Home = (): JSX.Element => {
         <div className="inset-x-0 mx-auto my-6 p-4 w-full md:w-1/2 lg:max-w-4xl">
           {/* Add post section */}
           <Box extraClassName="mb-10 p-5">
-            <AddPost onAddPost={(event: IAddedPost) => handleAddPost(event)} />
+            <AddPost onAddPost={(event: IAddedPost) => addPostHandler(event)} />
           </Box>
           {/* Posts sections */}
           {data.postData.map((post, index) => (
             <Box key={index} extraClassName="mb-10 p-5">
-              <Post {...post} />
+              <Post
+                firstName={post.firstName}
+                lastName={post.lastName}
+                id={post.id}
+                userId={post.userId}
+                createdAt={post.createdAt}
+                likes={post.likes}
+                comments={post.comments}
+                liked={post.liked}
+                desc={post.desc}
+                img={post.img}
+                onDeletePost={(event: any) => deletePostHandler(event)}
+              />
             </Box>
           ))}
         </div>

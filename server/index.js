@@ -23,6 +23,7 @@ app.use("/uploads", express.static("uploads"));
 const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/posts");
 const commentRoutes = require("./routes/comments");
+const likeRoutes = require("./routes/likes");
 
 //middlewares
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use(morgan("dev"));
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/like", likeRoutes);
 
 app.listen(PORT || 3030, () => {
   console.log(`Server listening on ${PORT}`);

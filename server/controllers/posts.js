@@ -46,4 +46,16 @@ const getAllPostByUserId = async (req, res) => {
   }
 };
 
-module.exports = { addPost, getAllPostByUserId };
+const deletePostById = async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    await db.execute(`DELETE FROM posts where id = ?`, [postId]);
+    await db.execute(`DELETE FROM comments where postId = ? `, [postId]);
+    res.status(200).json("Post deleted");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+module.exports = { addPost, getAllPostByUserId, deletePostById };
