@@ -7,6 +7,7 @@ export interface User {
   id: number;
   isValidate: number;
   lastName: string;
+  username?: string;
   profilePic?: string | null;
   website?: string | null;
 }

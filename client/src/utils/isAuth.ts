@@ -13,6 +13,7 @@ const isAuth = async (token: string) => {
             headers: { "x-access-token": token },
           }
         );
+
         resolve(response.data);
       } catch (err) {
         reject(err);

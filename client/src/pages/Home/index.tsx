@@ -1,9 +1,6 @@
 /* React */
 import React, { createContext, useEffect, useState } from "react";
 
-/* Query-string */
-import queryString from "query-string";
-
 /* Cookie */
 import { useCookies } from "react-cookie";
 
@@ -135,6 +132,7 @@ const initialData: IInitialData = {
   userData: {
     email: "",
     firstName: "",
+    username: "",
     iat: 0,
     id: 0,
     isValidate: 0,
@@ -153,7 +151,7 @@ const Home = (): JSX.Element => {
   let page = 0;
   let hasMorePosts = true;
   let limit = 10;
-
+  console.log(data);
   useEffect(() => {
     window.addEventListener("scroll", infiniteScroll);
 
@@ -165,6 +163,7 @@ const Home = (): JSX.Element => {
         iat: 0,
         id: 0,
         isValidate: 0,
+        username: "",
         lastName: "",
       };
 
