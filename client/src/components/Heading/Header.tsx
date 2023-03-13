@@ -1,5 +1,4 @@
 import {
-  faArrowLeft,
   faBell,
   faCaretDown,
   faCircleInfo,
@@ -8,7 +7,6 @@ import {
   faRightFromBracket,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
@@ -91,7 +89,9 @@ const Header = ({ menu }: IHeaderProps) => {
         {/* Hamburger and Logo container */}
         <div className="flex flex-row items-center">
           <Hamburger onClick={() => setShowSideMenu(true)} />
-          <div style={{ color: "white", fontWeight: "bold" }}>LamaSocial</div>
+          <button style={{ color: "white", fontWeight: "bold" }}>
+            <a href="/#">LamaSocial</a>
+          </button>
         </div>
 
         {/* Search */}

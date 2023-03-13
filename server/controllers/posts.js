@@ -46,16 +46,46 @@ const getAllPostByUserId = async (req, res) => {
   }
 };
 
+const getAllPostByUsername = async (req, res) => {
+  const { username } = req.params;
+
+  const { limit: queryLimit, page: queryPage } = req.query;
+  const skip = queryPage * queryLimit;
+  const limit = `${skip}, ${queryLimit}`;
+
+  try {
+    const userIdArray = await db.execute(
+      `SELECT users.id FROM users WHERE users.userName = ?`,
+      [username]
+    );
+    const userId = userIdArray[0][0].id;
+    const posts = await db.execute(
+      `SELECT users.firstName, users.lastName, posts.*, (SELECT COUNT(comments.id) FROM comments WHERE comments.userId = ? AND comments.postId = posts.id) as comments, (SELECT COUNT(likes.id) FROM likes WHERE likes.postId = posts.id) as likes, (SELECT IF ((SELECT COUNT(*) FROM likes WHERE likes.userId = ? AND likes.postId = posts.id), 'yes', 'no')) as liked FROM posts INNER JOIN users ON users.id = posts.userID WHERE userId = ? ORDER BY posts.createdAt desc limit ${limit}`,
+      [userId, userId, userId]
+    );
+
+    return res.status(200).send(posts[0]);
+  } catch (err) {
+    if (err) res.status(500).send(err);
+  }
+};
+
 const deletePostById = async (req, res) => {
   const { postId } = req.params;
 
   try {
     await db.execute(`DELETE FROM posts where id = ?`, [postId]);
     await db.execute(`DELETE FROM comments where postId = ? `, [postId]);
+    await db.execute(`DELETE FROM likes where postId = ? `, [postId]);
     res.status(200).json("Post deleted");
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
-module.exports = { addPost, getAllPostByUserId, deletePostById };
+module.exports = {
+  addPost,
+  getAllPostByUserId,
+  getAllPostByUsername,
+  deletePostById,
+};

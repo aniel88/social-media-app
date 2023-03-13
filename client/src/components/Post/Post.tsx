@@ -1,8 +1,8 @@
 /* React */
-import React, { SetStateAction, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 /*Crypto*/
-import { encrypt, decrypt } from "../../utils/crypto";
+import { encrypt } from "../../utils/crypto";
 
 /* Font Awesome */
 import {
@@ -22,13 +22,16 @@ import { ICommentProps } from "../Comment/Comment";
 /* Axios */
 import axios from "axios";
 
-/* Context */
-import { UserContext } from "../../pages/Home";
-
 /* Utils */
 import { convertMySqlBoolean } from "../../utils/convertMySqlBoolean";
 import { formatPostDate } from "../../utils/formatPostDate";
 import { formatQueryParam } from "../../utils/formatQueryParams";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux/store/store";
+import { selectUserData } from "../../utils/selectors";
+
+/* Redux */
+import { postAction } from "../../redux/reducers/post/postSlice";
 
 export interface IPostProps {
   firstName: string;
@@ -41,7 +44,6 @@ export interface IPostProps {
   likes: number;
   comments: number;
   liked: string;
-  onDeletePost?: any;
 }
 
 interface ILike {
@@ -69,9 +71,9 @@ const Post = ({
   likes,
   liked,
   img,
-  onDeletePost,
 }: IPostProps) => {
-  const userData = useContext(UserContext);
+  const userData = useSelector(selectUserData);
+
   const [commentsData, setCommentsData] =
     useState<commentDataType>(initialCommentsData);
   const [showComments, setShowComments] = useState(false);
@@ -82,7 +84,7 @@ const Post = ({
     isActive: convertMySqlBoolean(liked),
   });
   const [numberOfComments, setNumberOfComments] = useState(comments);
-
+  const dispatch = useDispatch<AppDispatch>();
   const handleScroll = () => {
     const currentScrollPos = window.scrollY;
 
@@ -116,12 +118,7 @@ const Post = ({
   };
 
   const deletePostHandler = async () => {
-    try {
-      await axios.delete(
-        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/posts/${id}`
-      );
-      onDeletePost(id);
-    } catch (_err) {}
+    dispatch(postAction({ type: "delete", postId: id }));
   };
 
   const onLikePostHandler = async () => {
@@ -173,7 +170,14 @@ const Post = ({
     <div className="flex flex-col w-full">
       <div className="flex flex-row user-details items-center">
         <div className="user-image p-2">
-          <UserIcon showStatus={false} icon="" />
+          <UserIcon
+            showStatus={false}
+            icon={
+              userData.profilePic !== null
+                ? `http://localhost:8080/uploads/users/profile/${userData.profilePic}`
+                : ""
+            }
+          />
         </div>
 
         <div className="flex flex-row w-full justify-between p-2">

@@ -15,7 +15,7 @@ const addLikeByPostId = async (req, res) => {
     .replace("Por21Ld", "/")
     .replace("Ml32", "=");
   const userIdDecrypted = decrypt(userIdEncryptedFormatted);
-
+  console.log(postIdDecrypted, userIdEncryptedFormatted);
   try {
     await db.execute(`INSERT INTO likes (userId, postId) VALUES (?, ?)`, [
       parseInt(userIdDecrypted),
@@ -23,6 +23,7 @@ const addLikeByPostId = async (req, res) => {
     ]);
     res.status(200).json("Like added");
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };
@@ -39,7 +40,7 @@ const deleteLikeByPostId = async (req, res) => {
     .replace("Por21Ld", "/")
     .replace("Ml32", "=");
   const userIdDecrypted = decrypt(userIdEncryptedFormatted);
-
+  console.log(postIdDecrypted, userIdEncryptedFormatted);
   try {
     const x = await db.execute(
       `DELETE FROM likes WHERE postId= ? AND userId= ?`,
@@ -48,6 +49,7 @@ const deleteLikeByPostId = async (req, res) => {
 
     res.status(200).json("Like deleted");
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };

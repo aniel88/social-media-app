@@ -16,6 +16,8 @@ import Text from "../../../components/Text/Text";
 /* Font awesome */
 import { faEnvelopeCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+/* Axios */
 import axios from "axios";
 
 const baseClassIcon = "checked-icon";
@@ -30,7 +32,7 @@ const SuccessRegister = () => {
       .post(
         `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/register/success/${token}`
       )
-      .then((resp) => console.log(resp))
+      .then((_resp) => {})
       .catch((error) => {
         navigate("/login");
       });

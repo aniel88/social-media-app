@@ -34,8 +34,8 @@ const ConfirmRegister = () => {
       .post(
         `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/register/confirm/${token}`
       )
-      .then((resp) => console.log(resp))
-      .catch((error) => {
+      .then((_resp) => {})
+      .catch((_error) => {
         navigate("/login");
       });
   });

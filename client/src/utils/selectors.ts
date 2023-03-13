@@ -7,3 +7,9 @@ export const selectLoadingStatusLogin = (state: any) => state.login.isLoading;
 
 /* Error messge on login */
 export const errorMessageLogin = (state: any) => state.login.errorMessage;
+
+/* User data */
+export const selectUserData = (state: any) => state.user.userData;
+
+/* Post data */
+export const selectPostData = (state: any) => state.post.postData;

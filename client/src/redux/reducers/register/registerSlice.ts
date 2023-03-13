@@ -27,7 +27,6 @@ export const createAccount = createAsyncThunk(
         `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/register`,
         formInputValues
       );
-      console.log(response.data);
       const { successToken } = response.data;
       return successToken;
     } catch (error) {

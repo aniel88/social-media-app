@@ -86,7 +86,9 @@ const Login = (): JSX.Element => {
   );
 
   useEffect(() => {
-    isAuth(cookieToken).then((_userData) => navigate("/"));
+    isAuth(cookieToken)
+      .then((_userData) => navigate("/"))
+      .catch((_err) => {});
   });
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {

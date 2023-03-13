@@ -27,6 +27,51 @@ interface ILeftSideProps {
   extraClassName?: string;
 }
 
+/* Data for Right side and Left side */
+export const eventsData: Array<IEventProps> = [
+  {
+    day: 25,
+    month: "December",
+    title: "Christmas Day",
+    url: "google.com",
+    location: { street: "Maitama Park", country: "Abuja" },
+  },
+  {
+    day: 26,
+    month: "December",
+    title: "Boxing Day",
+    url: "google.com",
+    location: { street: "Maitama Park", country: "Abuja" },
+  },
+];
+
+export const messageData: Array<Message> = [
+  {
+    urlIcon: "",
+    url: "https://www.google.com",
+    name: "Morohoschi Daniel-Iosif",
+    status: "online",
+  },
+  {
+    urlIcon: "",
+    url: "https://www.google.com",
+    name: "Alexandru Gabriel",
+    status: "away",
+  },
+  {
+    urlIcon: "",
+    url: "https://www.google.com",
+    name: "Ochis Alin",
+    status: "online",
+  },
+  {
+    urlIcon: "",
+    url: "https://www.google.com",
+    name: "Motofelea Emanuel",
+    status: "offline",
+  },
+];
+
 const LeftSide = ({ events, messages, extraClassName }: ILeftSideProps) => {
   return (
     <div className={extraClassName}>

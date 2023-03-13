@@ -31,6 +31,7 @@ const addCommentByPostId = async (req, res) => {
     );
     res.status(200).json(comment[0].insertId);
   } catch (err) {
+    console.log(postId, userId, description);
     res.status(500).json(err);
   }
 };

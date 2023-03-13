@@ -8,6 +8,21 @@ import HorizontalLine from "../HorizontalLine/HorizontalLine";
 import SideMenu from "../SideMenu/SideMenu";
 import SideGroup from "../SideGroup/SideGroup";
 
+/* Font Awesome */
+import {
+  faCartShopping,
+  faHome,
+  faPeopleGroup,
+  faTv,
+  faUserGroup,
+} from "@fortawesome/free-solid-svg-icons";
+
+/* Assets */
+import gamerXCommunityImage from "../../assets/gamerXCommunnity.jpeg";
+import photoshopImage from "../../assets/photoshop.jpeg";
+import cssImage from "../../assets/css.jpeg";
+import codImage from "../../assets/callofduty.jpeg";
+
 /* Interfaces */
 import { ISideMenuProps } from "../SideMenu/SideMenu";
 import { ISideGroupProps } from "../SideGroup/SideGroup";
@@ -17,6 +32,42 @@ export interface IRightSideProps {
   groups: ISideGroupProps[];
   extraClassName?: string;
 }
+
+export const sideGroupData: Array<ISideGroupProps> = [
+  { title: "GamerX Community", imageUrl: gamerXCommunityImage, url: "" },
+  { title: "Photoshop Romania", imageUrl: photoshopImage, url: "" },
+  { title: "Best Ankara Styles", imageUrl: cssImage, url: "" },
+  { title: "CODM Romania", imageUrl: codImage, url: "" },
+  { title: "CODM Europe", imageUrl: codImage, url: "" },
+];
+
+export const sideMenuData: Array<ISideMenuProps> = [
+  {
+    text: "Feed",
+    icon: faHome,
+    url: "",
+  },
+  {
+    text: "Watch",
+    icon: faTv,
+    url: "",
+  },
+  {
+    text: "Friends",
+    icon: faUserGroup,
+    url: "",
+  },
+  {
+    text: "Groups",
+    icon: faPeopleGroup,
+    url: "",
+  },
+  {
+    text: "Marketplace",
+    icon: faCartShopping,
+    url: "",
+  },
+];
 
 const RightSide = ({ menu, groups, extraClassName }: IRightSideProps) => {
   return (

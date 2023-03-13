@@ -1,16 +1,31 @@
 /* React */
+import React, { useEffect, useRef, useState } from "react";
+
+/* Font Awesome */
 import {
   faCamera,
   faLocationDot,
   faUserTag,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+/* Axios */
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+
+/* Cookie */
 import { useCookies } from "react-cookie";
+
+/* Component */
 import Button from "../Button/Button";
 import HorizontalLine from "../HorizontalLine/HorizontalLine";
 import UserIcon from "../UserIcon/UserIcon";
+
+/* Reducers */
+import { inputFormReducer, Action } from "../../redux/reducers/register/form";
+import { useDispatch, useSelector } from "react-redux/es/exports";
+import { postAction } from "../../redux/reducers/post/postSlice";
+import { AppDispatch } from "../../redux/store/store";
+import { selectPostData, selectUserData } from "../../utils/selectors";
 
 export interface IAddPostProps {
   onAddPost: any;
@@ -22,12 +37,17 @@ export interface IAddedPost {
   id: number;
 }
 
-const AddPost = ({ onAddPost }: IAddPostProps) => {
+const AddPost = () => {
+  /* User Data */
+  const userData = useSelector(selectUserData);
+  /* User Posts */
+  const userPosts = useSelector(selectPostData);
   const [image, setImage] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [description, setDescription] = useState("");
   const [token, setToken, removeToken] = useCookies(["access-token"]);
   let currentToken = "";
+  const dispatch = useDispatch<AppDispatch>();
   currentToken = token["access-token"];
   const inputImageRef = useRef<HTMLInputElement>(null);
 
@@ -49,22 +69,18 @@ const AddPost = ({ onAddPost }: IAddPostProps) => {
   };
 
   const onAddPostHandler = async () => {
-    const formData = new FormData();
-    formData.append("postImage", image[0]);
-    formData.append("description", description);
-
-    const addedPostId = await axios.post(
-      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/posts/add`,
-      formData,
-      {
-        headers: {
-          "x-access-token": currentToken,
-          "Content-Type": "multipart/form-data",
-        },
-      }
+    await dispatch(
+      postAction({
+        type: "add",
+        image,
+        description,
+        currentToken,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        userId: userData.id,
+      })
     );
-
-    onAddPost({ imageUrl: imageUrl, description, id: addedPostId.data });
+    setImage([]);
     setImageUrl("");
     setDescription("");
   };

@@ -48,7 +48,11 @@ const UserIcon = ({
   return (
     <div onClick={onClick} className={className}>
       {showStatus ? <div className={statusClassName} title={status}></div> : ""}
-      <img src={icon ? icon : defaultUserImage} alt="user image" />
+      <img
+        className="w-full h-full"
+        src={icon ? icon : defaultUserImage}
+        alt="user image"
+      />
       {children}
     </div>
   );

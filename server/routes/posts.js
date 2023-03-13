@@ -24,6 +24,7 @@ router.post(
 );
 
 router.get("/:userId", postController.getAllPostByUserId);
+router.get("/user/:username", postController.getAllPostByUsername);
 router.delete("/:postId", postController.deletePostById);
 
 module.exports = router;

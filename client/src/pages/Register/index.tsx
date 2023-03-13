@@ -1,6 +1,7 @@
 /* React */
 import React, { Reducer, useEffect, useReducer } from "react";
 
+/* Redux */
 import type { AppDispatch } from "../../redux/store/store";
 
 /* Models */
@@ -17,6 +18,7 @@ import axios from "axios";
 /* React router */
 import { useNavigate } from "react-router-dom";
 
+/* Custom style */
 import {
   RegisterImageLayout,
   RegisterImage,
@@ -102,7 +104,9 @@ const Register = (): JSX.Element => {
   );
 
   useEffect(() => {
-    isAuth(cookieToken).then((_userData) => navigate("/"));
+    isAuth(cookieToken)
+      .then((_userData) => navigate("/"))
+      .catch((_err) => {});
   });
 
   const usernameExist = async (username: string) => {

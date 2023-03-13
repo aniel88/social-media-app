@@ -2,7 +2,9 @@
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { formatPostDate } from "../../utils/formatPostDate";
+import { selectUserData } from "../../utils/selectors";
 import UserIcon from "../UserIcon/UserIcon";
 
 export interface ICommentProps {
@@ -26,7 +28,10 @@ const Comment = ({
     <div className="flex flex-col relative">
       <div className="flex flex-row items-center justify-between mt-3 ">
         <div className="flex flex-row items-center text-sm">
-          <UserIcon showStatus={false} icon={profilePic} />
+          <UserIcon
+            showStatus={false}
+            icon={`http://localhost:8080/uploads/users/profile/${profilePic}`}
+          />
           <div className="p-2">
             <div className="font-bold">
               {lastName} {firstName}

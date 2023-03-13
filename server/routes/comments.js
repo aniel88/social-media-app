@@ -6,7 +6,6 @@ const router = express.Router();
 
 /* Controller */
 const commentController = require("../controllers/comments");
-const isAuth = require("../middlewares/isAuth");
 
 /* Routers */
 router.get("/:postId", commentController.getCommentsByPostId);

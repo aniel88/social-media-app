@@ -1,12 +1,13 @@
 import React from "react";
 import "./App.css";
 import "./index";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import ConfirmRegister from "./pages/Register/ConfirmRegister";
 import SuccessRegister from "./pages/Register/SuccessRegister";
+import UserProfile from "./pages/UserProfile/UserProfile";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
+          <Route path="/:userName" element={<UserProfile />} />
           {/* Secured routes by token */}
           <Route
             path="/register/success/:token"
@@ -26,6 +27,8 @@ function App() {
             path="/register/confirm/:token"
             element={<ConfirmRegister />}
           />
+
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </HashRouter>
     </div>

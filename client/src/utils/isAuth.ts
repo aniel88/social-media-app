@@ -18,7 +18,7 @@ const isAuth = async (token: string) => {
       } catch (err) {
         reject(err);
       }
-    } else reject(new Error("Token required"));
+    } else reject("Token required");
   });
   return userData;
 };

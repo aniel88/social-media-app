@@ -1,7 +1,10 @@
 /* React */
 import axios from "axios";
 import React, { useContext } from "react";
-import { UserContext } from "../../pages/Home";
+import { useDispatch, useSelector } from "react-redux";
+
+import { AppDispatch } from "../../redux/store/store";
+import { selectUserData } from "../../utils/selectors";
 
 /* Components */
 import AddComment from "../AddComment/AddComment";
@@ -22,7 +25,8 @@ const Comments = ({
   numberOfComments,
   onShowMore,
 }: ICommentsProps) => {
-  const userData = useContext(UserContext);
+  const userData = useSelector(selectUserData);
+
   const { id: userId, profilePic, lastName, firstName } = userData;
 
   const addCommentHandler = async (event: string) => {

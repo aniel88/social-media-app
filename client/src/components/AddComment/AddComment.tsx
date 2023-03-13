@@ -21,11 +21,14 @@ const AddComment = ({ imageUrl, onAddComment }: IAddCommentProps) => {
     onAddComment(comment);
     setComment("");
   };
-
+  console.log(imageUrl);
   return (
     <div className="flex flex-row items-center">
       <div>
-        <UserIcon showStatus={false} icon={imageUrl} />
+        <UserIcon
+          showStatus={false}
+          icon={`http://localhost:8080/uploads/users/profile/${imageUrl}`}
+        />
       </div>
       <input
         type="text"
