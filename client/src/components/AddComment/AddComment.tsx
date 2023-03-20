@@ -1,5 +1,7 @@
 /* React */
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectUserData } from "../../utils/selectors";
 
 /* Components */
 import Button from "../Button/Button";
@@ -11,6 +13,8 @@ interface IAddCommentProps {
 }
 
 const AddComment = ({ imageUrl, onAddComment }: IAddCommentProps) => {
+  const userData = useSelector(selectUserData);
+
   const [comment, setComment] = useState("");
 
   const commentInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,13 +25,17 @@ const AddComment = ({ imageUrl, onAddComment }: IAddCommentProps) => {
     onAddComment(comment);
     setComment("");
   };
-  console.log(imageUrl);
+
   return (
     <div className="flex flex-row items-center">
       <div>
         <UserIcon
           showStatus={false}
-          icon={`http://localhost:8080/uploads/users/profile/${imageUrl}`}
+          icon={
+            userData.profilePic.includes("blob")
+              ? userData.profilePic
+              : `http://localhost:8080/uploads/users/profile/${userData.profilePic}`
+          }
         />
       </div>
       <input

@@ -15,9 +15,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
-import changeUserProfileImage from "../../redux/reducers/user/userSlice";
 import { AppDispatch } from "../../redux/store/store";
-import { setPostData } from "../../redux/reducers/post/postSlice";
+import { changeUserProfileImage } from "../../redux/reducers/user/userSlice";
 
 const UserProfileHeader = () => {
   const userData = useSelector(selectUserData);
@@ -91,10 +90,13 @@ const UserProfileHeader = () => {
         },
       }
     );
-    setToken("access-token", response.data, {
+    console.log(response.data);
+    setToken("access-token", response.data.token, {
       path: "/",
     });
-    dispatch(changeUserProfileImage);
+
+    dispatch(changeUserProfileImage(e.target.files));
+    console.log(e.target.files);
     setUserProfileImage(e.target.files);
   };
   return (

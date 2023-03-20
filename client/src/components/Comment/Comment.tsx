@@ -13,6 +13,7 @@ export interface ICommentProps {
   firstName: string;
   description: string;
   createdAt: string;
+  userName: string;
   id: number;
 }
 
@@ -22,19 +23,28 @@ const Comment = ({
   firstName = "",
   description = "",
   createdAt = "",
+  userName = "",
   id = 0,
 }: ICommentProps) => {
+  const userData = useSelector(selectUserData);
+  console.log(userData, userName);
   return (
     <div className="flex flex-col relative">
       <div className="flex flex-row items-center justify-between mt-3 ">
         <div className="flex flex-row items-center text-sm">
           <UserIcon
             showStatus={false}
-            icon={`http://localhost:8080/uploads/users/profile/${profilePic}`}
+            icon={
+              userData.userName === userName
+                ? userData.profilePic?.includes("blob")
+                  ? userData.profilePic
+                  : `http://localhost:8080/uploads/users/profile/${profilePic}`
+                : `http://localhost:8080/uploads/users/profile/${profilePic}`
+            }
           />
           <div className="p-2">
             <div className="font-bold">
-              {lastName} {firstName}
+              {firstName} {lastName}
             </div>
             <div className="">{description}</div>
           </div>

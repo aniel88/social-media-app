@@ -97,6 +97,7 @@ const Post = ({
     setNumberOfComments(numberOfComments + 1);
 
     setCommentsData((prevComments) => {
+      console.log(event);
       return {
         page: prevComments.page,
         data: [event, ...prevComments.data],
@@ -174,7 +175,9 @@ const Post = ({
             showStatus={false}
             icon={
               userData.profilePic !== null
-                ? `http://localhost:8080/uploads/users/profile/${userData.profilePic}`
+                ? userData.profilePic.includes("blob")
+                  ? userData.profilePic
+                  : `http://localhost:8080/uploads/users/profile/${userData.profilePic}`
                 : ""
             }
           />

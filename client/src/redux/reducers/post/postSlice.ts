@@ -1,5 +1,5 @@
 /* Async thunk */
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
 /* Axios */
 import axios from "axios";
@@ -93,10 +93,6 @@ export const postSlice = createSlice({
   reducers: {
     setPostData(state, action) {
       state.postData = [...state.postData, ...action.payload.postData];
-    },
-    changeUserProfileImage(state, action) {
-      console.log("state");
-      return state;
     },
   },
   extraReducers: {

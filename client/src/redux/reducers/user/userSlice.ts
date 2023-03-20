@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IPostProps } from "../../../components/Post/Post";
 import { User } from "../../../models/user";
@@ -80,6 +80,12 @@ export const userSlice = createSlice({
       state.postData = action.payload.postData;
       state.userData = action.payload.userData;
     },
+    changeUserProfileImage(state, action) {
+      console.log(URL.createObjectURL(action.payload[0]));
+      console.log(current(state.userData));
+      state.userData.profilePic = URL.createObjectURL(action.payload[0]);
+      // state.postData = [...state.postData, ...action.payload.postData];
+    },
   },
   extraReducers: {
     [addPost.pending.toString()]: (state) => {
@@ -110,6 +116,10 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUserDataAndPostData, setUserData, setPostData } =
-  userSlice.actions;
+export const {
+  setUserDataAndPostData,
+  setUserData,
+  setPostData,
+  changeUserProfileImage,
+} = userSlice.actions;
 export default userSlice.reducer;

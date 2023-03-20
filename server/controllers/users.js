@@ -63,7 +63,7 @@ const changeUserProfileImage = async (req, res) => {
       isValidate,
     });
 
-    res.status(200).json(generatedToken);
+    res.status(200).json({ image: profilePic, token: generatedToken });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

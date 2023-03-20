@@ -26,7 +26,7 @@ const Comments = ({
   onShowMore,
 }: ICommentsProps) => {
   const userData = useSelector(selectUserData);
-
+  console.log(comments);
   const { id: userId, profilePic, lastName, firstName } = userData;
 
   const addCommentHandler = async (event: string) => {
