@@ -4,6 +4,8 @@ const { queries } = require("../../utils/queries");
 
 const confirmAddress = async (req, res) => {
   const tokenConfirm = req.params.token;
+  const isDevelopment = process.env.NODE_ENV === "DEVELOPMENT";
+
   try {
     const decodedToken = await token.decode(tokenConfirm);
     const { userName } = decodedToken;
@@ -11,7 +13,15 @@ const confirmAddress = async (req, res) => {
       await db.execute(queries.UPDATE_USER_VALIDATION_BY_ID, [1, userName]);
 
       res.redirect(
-        `http://${process.env.DOMAIN}:${process.env.CLIENT_PORT}/#/register/confirm/${tokenConfirm}`
+        `http://${
+          isDevelopment
+            ? process.env.DEVELOPMENT_DOMAIN
+            : process.env.PRODUCTION_DOMAIN
+        }:${
+          isDevelopment
+            ? process.env.DEVELOPMENT_PORT
+            : process.env.PRODUCTION_PORT
+        }/#/register/confirm/${tokenConfirm}`
       );
     } catch (err) {
       console.log(err);

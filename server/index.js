@@ -38,5 +38,11 @@ app.use("/api/like", likeRoutes);
 app.use("/api/user", userRoutes);
 
 app.listen(PORT || 3030, () => {
-  console.log(`Server listening on ${PORT}`);
+  console.log(
+    `Server listening on ${
+      process.env.NODE_ENV === "DEVELOPMENT"
+        ? process.env.DEVELOPMENT_PORT
+        : process.env.PRODUCTION_PORT
+    } in ${process.env.NODE_ENV} mode`
+  );
 });
