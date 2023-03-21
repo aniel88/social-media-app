@@ -91,10 +91,12 @@ const register = async (req, res) => {
 
   //#Check if user exists
   try {
+    console.log("INTRA IN TRY CATCH");
     const checkUserPromise = await db.execute(
       queries.SELECT_USER_BY_USERNAME_OR_EMAIL,
       [userName, email]
     );
+    console.log("IESEgit ");
 
     if (checkUserPromise[0].length !== 0)
       res.status(409).json("User already exists");
