@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.0c91bc8c.css",
+    "main.js": "/static/js/main.ae7dae35.js",
+    "static/media/register_image.jpeg": "/static/media/register_image.521923078940f7b8d036.jpeg",
+    "static/media/default-cover-image.jpg": "/static/media/default-cover-image.18b5f65b8709148cdaa6.jpg",
+    "static/media/restaurat-example.png": "/static/media/restaurat-example.21d33aa540810e9beb11.png",
+    "static/media/gamerXCommunnity.jpeg": "/static/media/gamerXCommunnity.393d47db0a8ab35f48d8.jpeg",
+    "index.html": "/index.html",
+    "main.0c91bc8c.css.map": "/static/css/main.0c91bc8c.css.map",
+    "main.ae7dae35.js.map": "/static/js/main.ae7dae35.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0c91bc8c.css",
+    "static/js/main.ae7dae35.js"
+  ]
+}
