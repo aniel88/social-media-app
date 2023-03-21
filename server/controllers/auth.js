@@ -80,6 +80,7 @@ const login = async (req, res) => {
 
 /* Register */
 const register = async (req, res) => {
+  console.log(req.body);
   const {
     firstName,
     lastName,
