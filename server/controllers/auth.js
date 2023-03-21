@@ -74,7 +74,7 @@ const login = async (req, res) => {
       return res.status(500).json("Please validate your email!");
     }
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json(err.toStrong());
   }
 };
 
