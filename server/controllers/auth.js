@@ -131,7 +131,7 @@ const register = async (req, res) => {
       return res.status(500).json("Error");
     }
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json(err.toString());
   }
 };
 
