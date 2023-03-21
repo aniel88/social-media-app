@@ -12,7 +12,10 @@ const cors = require("cors");
 
 dotenv.config();
 
-const PORT = process.env.SERVER_PORT;
+const PORT =
+  process.env.NODE_ENV === "DEVELOPMENT"
+    ? process.env.DEVELOPMENT_PORT
+    : process.env.PRODUCTION_PORT;
 
 const app = express();
 
@@ -29,7 +32,7 @@ const userRoutes = require("./routes/users");
 //middlewares
 app.use(express.json());
 app.use(cors());
-app.use(morgan("dev"));
+app.use(morgan(process.env.NODE_ENV === "DEVELOPMENT" ? "dev" : "combined"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
@@ -38,11 +41,5 @@ app.use("/api/like", likeRoutes);
 app.use("/api/user", userRoutes);
 
 app.listen(PORT || 3030, () => {
-  console.log(
-    `Server listening on ${
-      process.env.NODE_ENV === "DEVELOPMENT"
-        ? process.env.DEVELOPMENT_PORT
-        : process.env.PRODUCTION_PORT
-    } in ${process.env.NODE_ENV} mode`
-  );
+  console.log(`Server listening on ${PORT} in ${process.env.NODE_ENV} mode`);
 });
