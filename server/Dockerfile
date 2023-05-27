@@ -1,19 +1,21 @@
-# FROM node:lts-alpine
-FROM mysql:latest
+FROM node:lts-alpine
 
 COPY init/01.sql /docker-entrypoint-initdb.d/
 
-# WORKDIR /usr/src/app
+WORKDIR /usr/src/app
 
-# COPY package*.json pnpm-lock.yaml ./
+COPY package*.json pnpm-lock.yaml ./
 
-# RUN npm i -g pnpm
-# RUN pnpm install
+RUN npm i -g pnpm
+RUN pnpm install
 
-# COPY . .
+COPY . .
 
-# RUN npm run start-production
+# Add docker-compose-wait tool -------------------
 
-# EXPOSE 8090
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.11.0/wait /wait
+RUN chmod +x /wait
 
-# CMD [ "npm run start-production" ]
+EXPOSE 8090
+
+CMD [ "npm run start-production" ]

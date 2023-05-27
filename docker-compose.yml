@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  ui:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: ui
+    ports: [3000:3000]
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: api
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    ports: [8090:8090]
+    expose: [8090]
+    depends_on:
+      db:
+        condition: service_healthy
+    command: npm run start-production
+    networks:
+      - appNet
+
+  db:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: db-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_TCP_PORT: 3307
+    ports: [3307:3307]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$$PRODUCTION_DB_PASSWORD",
+        ]
+      timeout: 5s
+      retries: 10
+    expose:
+      - 3307
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      # - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+
+networks:
+  appNet:
+    driver: bridge

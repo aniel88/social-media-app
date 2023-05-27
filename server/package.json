@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-development": "NODE_ENV=DEVELOPMENT nodemon index.js",
-    "start-production": "node index.js",
-    "preinstall": "npx only-allow pnpm"
+    "start-production": "NODE_ENV=PRODUCTION node index.js",
+    "preinstall": "npx only-allow pnpm",
+    "build": "npm run buid"
   },
   "author": "",
   "license": "ISC",

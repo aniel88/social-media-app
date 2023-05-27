@@ -13,6 +13,7 @@ const db = mysql.createPool(
         user: process.env.PRODUCTION_DB_USER,
         password: process.env.PRODUCTION_DB_PASSWORD,
         database: process.env.PRODUCTION_DB_DATABASE,
+        port: process.env.PRODUCTION_DB_PORT,
       }
 );
 
