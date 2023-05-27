@@ -4,11 +4,16 @@ const privateKey = process.env.TOKEN_PRIVATE_KEY;
 
 const generate = async (data) => {
   const token = await new Promise((resolve, reject) => {
-    jwt.sign(data, privateKey, { algorithm: "HS256" }, (err, token) => {
-      if (err) {
-        reject(err);
-      } else resolve(token);
-    });
+    jwt.sign(
+      data,
+      privateKey,
+      { algorithm: "HS256", expiresIn: "12h" },
+      (err, token) => {
+        if (err) {
+          reject(err);
+        } else resolve(token);
+      }
+    );
   });
 
   return token;

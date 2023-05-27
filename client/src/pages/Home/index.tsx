@@ -82,7 +82,15 @@ const Home = (): JSX.Element => {
         /* Dispatch user data */
         dispatch(setUserData({ userData: userData }));
         const postData = await axios.get(
-          `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/posts/${userData.id}?limit=${limit}&page=${page}`
+          `http://${
+            process.env.NODE_ENV === "development"
+              ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+              : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+          }:${
+            process.env.NODE_ENV === "development"
+              ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+              : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+          }/api/posts/${userData.id}?limit=${limit}&page=${page}`
         );
         /* Dispatch post data */
         dispatch(setPostData({ postData: postData.data }));
@@ -102,8 +110,14 @@ const Home = (): JSX.Element => {
     if (windowInnerHeight + scrollToTop === offsetHeight) {
       if (hasMorePosts) {
         const postData = await axios.get(
-          `http://${process.env.REACT_APP_DOMAIN}:${
-            process.env.REACT_APP_SERVER_PORT
+          `http://${
+            process.env.NODE_ENV === "development"
+              ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+              : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+          }:${
+            process.env.NODE_ENV === "development"
+              ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+              : process.env.REACT_APP_PRODUCTION_SERVER_PORT
           }/api/posts/171?limit=${limit}&page=${(page += 1)}`
         );
 

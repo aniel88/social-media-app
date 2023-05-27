@@ -53,6 +53,9 @@ const getAllPostByUsername = async (req, res) => {
   const skip = queryPage * queryLimit;
   const limit = `${skip}, ${queryLimit}`;
 
+  const skipForMorePosts = (parseFloat(queryPage) + 1) * queryLimit;
+  const limitForMorePosts = `${skipForMorePosts}, ${queryLimit}`;
+
   try {
     const userIdArray = await db.execute(
       `SELECT users.id FROM users WHERE users.userName = ?`,
@@ -64,6 +67,13 @@ const getAllPostByUsername = async (req, res) => {
       [userId, userId, userId]
     );
 
+    const hasMorePosts = await db.execute(
+      `SELECT users.firstName, users.lastName, posts.*, (SELECT COUNT(comments.id) FROM comments WHERE comments.userId = ? AND comments.postId = posts.id) as comments, (SELECT COUNT(likes.id) FROM likes WHERE likes.postId = posts.id) as likes, (SELECT IF ((SELECT COUNT(*) FROM likes WHERE likes.userId = ? AND likes.postId = posts.id), 'yes', 'no')) as liked FROM posts INNER JOIN users ON users.id = posts.userID WHERE userId = ? ORDER BY posts.createdAt desc limit ${limitForMorePosts}`,
+      [userId, userId, userId]
+    );
+    if (hasMorePosts[0].length > 0) {
+      console.log("has more posts");
+    }
     return res.status(200).send(posts[0]);
   } catch (err) {
     if (err) res.status(500).send(err);

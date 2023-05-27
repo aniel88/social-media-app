@@ -20,7 +20,15 @@ export const login = createAsyncThunk(
   async (formInputValues: LoginType, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/login`,
+        `http://${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+            : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+        }:${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+            : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+        }/api/auth/login`,
         formInputValues
       );
 

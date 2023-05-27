@@ -107,7 +107,15 @@ const Post = ({
 
   const fetchMoreComments = async () => {
     const comments = await axios.get(
-      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/comments/${id}?limit=${limit}&page=${commentsData.page}`
+      `http://${
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+          : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+      }:${
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+          : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+      }/api/comments/${id}?limit=${limit}&page=${commentsData.page}`
     );
 
     setCommentsData((prevComments) => {
@@ -131,7 +139,15 @@ const Post = ({
 
     if (like?.isActive) {
       await axios.delete(
-        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/like?postId=${encryptedPostIdFormatted}&userId=${encryptedUserIdFormatted}`
+        `http://${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+            : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+        }:${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+            : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+        }/api/like?postId=${encryptedPostIdFormatted}&userId=${encryptedUserIdFormatted}`
       );
       setLike((prevLike) => {
         return {
@@ -141,7 +157,15 @@ const Post = ({
       });
     } else {
       await axios.put(
-        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/like?postId=${encryptedPostIdFormatted}&userId=${encryptedUserIdFormatted}`
+        `http://${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+            : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+        }:${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+            : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+        }/api/like?postId=${encryptedPostIdFormatted}&userId=${encryptedUserIdFormatted}`
       );
       setLike((prevLike) => {
         return {
@@ -155,7 +179,15 @@ const Post = ({
   useEffect(() => {
     const fetchComments = async () => {
       const comments = await axios.get(
-        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/comments/${id}?limit=${limit}&page=${commentsData.page}`
+        `http://${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+            : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+        }:${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+            : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+        }/api/comments/${id}?limit=${limit}&page=${commentsData.page}`
       );
 
       setCommentsData({ page: 1, data: comments.data });
@@ -177,7 +209,15 @@ const Post = ({
               userData.profilePic !== null
                 ? userData.profilePic.includes("blob")
                   ? userData.profilePic
-                  : `http://localhost:8080/uploads/users/profile/${userData.profilePic}`
+                  : `http://${
+                      process.env.NODE_ENV === "development"
+                        ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+                        : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+                    }:${
+                      process.env.NODE_ENV === "development"
+                        ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+                        : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+                    }/uploads/users/profile/${userData.profilePic}`
                 : ""
             }
           />
@@ -225,7 +265,15 @@ const Post = ({
               src={
                 img.includes("blob")
                   ? img
-                  : `http://localhost:8080/uploads/posts/${img}`
+                  : `http://${
+                      process.env.NODE_ENV === "development"
+                        ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+                        : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+                    }:${
+                      process.env.NODE_ENV === "development"
+                        ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+                        : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+                    }/uploads/posts/${img}`
               }
             />
           </div>

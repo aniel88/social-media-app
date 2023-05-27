@@ -54,7 +54,15 @@ const UserProfileHeader = () => {
     formData.append("userCoverImage", e.target.files[0]);
     console.log(e.target.files[0]);
     const response = await axios.post(
-      `http://localhost:8080/api/user/cover`,
+      `http://${
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+          : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+      }:${
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+          : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+      }/api/user/cover`,
       formData,
       {
         headers: {
@@ -81,7 +89,15 @@ const UserProfileHeader = () => {
     formData.append("userProfileImage", e.target.files[0]);
     console.log(e.target.files[0]);
     const response = await axios.post(
-      `http://localhost:8080/api/user/profile`,
+      `http://${
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+          : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+      }:${
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+          : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+      }/api/user/profile`,
       formData,
       {
         headers: {
@@ -120,7 +136,15 @@ const UserProfileHeader = () => {
             src={
               userCoverImageUrl.length === 0
                 ? userData.coverPic
-                  ? `http://localhost:8080/uploads/users/cover/${userData.coverPic}`
+                  ? `http://${
+                      process.env.NODE_ENV === "development"
+                        ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+                        : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+                    }:${
+                      process.env.NODE_ENV === "development"
+                        ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+                        : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+                    }/uploads/users/cover/${userData.coverPic}`
                   : defaultCoverImage
                 : userCoverImageUrl
             }
@@ -147,7 +171,15 @@ const UserProfileHeader = () => {
             src={
               userProfileImageUrl.length === 0
                 ? userData.profilePic !== null
-                  ? `http://localhost:8080/uploads/users/profile/${userData.profilePic}`
+                  ? `http://${
+                      process.env.NODE_ENV === "development"
+                        ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+                        : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+                    }:${
+                      process.env.NODE_ENV === "development"
+                        ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+                        : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+                    }/uploads/users/profile/${userData.profilePic}`
                   : defaultUserImage
                 : userProfileImageUrl
             }

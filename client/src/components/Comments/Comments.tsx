@@ -31,7 +31,15 @@ const Comments = ({
 
   const addCommentHandler = async (event: string) => {
     const commentId = await axios.post(
-      `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/comments/${postId}`,
+      `http://${
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+          : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+      }:${
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+          : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+      }/api/comments/${postId}`,
       { description: event, userId }
     );
     onCommentAdded({

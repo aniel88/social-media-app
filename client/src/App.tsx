@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import "./index";
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
@@ -10,6 +10,9 @@ import SuccessRegister from "./pages/Register/SuccessRegister";
 import UserProfile from "./pages/UserProfile/UserProfile";
 
 function App() {
+  useEffect(() => {
+    document.body.style.backgroundColor = "#F3F4F6";
+  });
   return (
     <div className="h-full">
       <HashRouter>

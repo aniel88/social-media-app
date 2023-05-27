@@ -34,7 +34,15 @@ const AddComment = ({ imageUrl, onAddComment }: IAddCommentProps) => {
           icon={
             userData.profilePic.includes("blob")
               ? userData.profilePic
-              : `http://localhost:8080/uploads/users/profile/${userData.profilePic}`
+              : `http://${
+                  process.env.NODE_ENV === "development"
+                    ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+                    : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+                }:${
+                  process.env.NODE_ENV === "development"
+                    ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+                    : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+                }/uploads/users/profile/${userData.profilePic}`
           }
         />
       </div>

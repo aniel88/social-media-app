@@ -30,7 +30,15 @@ const SuccessRegister = () => {
   useEffect(() => {
     axios
       .post(
-        `http://${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/auth/register/success/${token}`
+        `http://${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_DOMAIN
+            : process.env.REACT_APP_PRODUCTION_SERVER_DOMAIN
+        }:${
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEVELOPMENT_SERVER_PORT
+            : process.env.REACT_APP_PRODUCTION_SERVER_PORT
+        }/api/auth/register/success/${token}`
       )
       .then((_resp) => {})
       .catch((error) => {
