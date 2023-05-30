@@ -4,14 +4,14 @@ services:
   ui:
     build:
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: production.Dockerfile
     container_name: ui
     ports: [3000:3000]
 
   api:
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: production.Dockerfile
     container_name: api
     restart: unless-stopped
     env_file:
@@ -31,7 +31,7 @@ services:
     container_name: db-mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: db
+      MYSQL_DATABASE: db-production
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_TCP_PORT: 3307

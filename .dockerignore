@@ -1,0 +1,6 @@
+./client/development.Dockerfile
+./client/production.Dockerfile
+./server/development.Dockerfile
+./server/production.Dockerfile
+./client/node_modules
+./server/node_modules
